@@ -1,0 +1,28 @@
+{
+  "extends": "@myapp/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/app/*": ["./app/(app)/*"],
+      "@/pages/*": ["./app/_pages/*"],
+      "@/widgets/*": ["./app/_widgets/*"],
+      "@/shared/*": ["./app/_shared/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "lib": ["dom", "dom.iterable", "es2022"]
+  },
+  "include": [
+    "next-env.d.ts",
+    "next.config.js",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/.well-known/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

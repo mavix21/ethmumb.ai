@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@myapp/tailwind-config/theme";
+@import "../components/long-sheet/long-sheet.css";
+@import "../components/page-from-bottom/page-from-bottom.css";
+@import "../components/page/page.css";
+@import "../components/bottom-sheet/bottom-sheet.css";
+@import "../components/card-sheet/card-sheet.css";
+
+@source "../../../../apps/**/*.{ts,tsx}";
+@source "../../../../packages/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+@custom-variant auto (&:where(.auto, .auto *));
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@utility faded-bottom {
+  @apply after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:hidden after:h-32 after:w-full after:bg-[linear-gradient(180deg,transparent_10%,white_70%)] md:after:block dark:after:bg-[linear-gradient(180deg,transparent_10%,black_70%)];
+}
+
+@utility bg-grid {
+  @apply bg-[repeating-linear-gradient(315deg,var(--muted)_0,var(--muted)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed;
+}
+
+.CollapsibleContent {
+  overflow: hidden;
+}
+.CollapsibleContent[data-state="open"] {
+  animation: slideDown 250ms ease-out;
+}
+.CollapsibleContent[data-state="closed"] {
+  animation: slideUp 250ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}

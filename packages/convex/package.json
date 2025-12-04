@@ -1,0 +1,36 @@
+{
+  "name": "@myapp/convex",
+  "version": "0.0.0",
+  "description": "Convex backend",
+  "exports": {
+    "./_generated/*": {
+      "types": "./convex/_generated/*.d.ts",
+      "default": "./convex/_generated/*.js"
+    },
+    "./auth": {
+      "types": "./convex/auth.ts",
+      "default": "./convex/auth.ts"
+    }
+  },
+  "scripts": {
+    "dev": "convex dev",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "setup": "convex dev --until-success",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@convex-dev/better-auth": "^0.9.11",
+    "@myapp/auth": "workspace:*",
+    "@neynar/nodejs-sdk": "^3.99.0",
+    "convex": "^1.30.0",
+    "convex-helpers": "^0.1.106"
+  },
+  "devDependencies": {
+    "@better-auth/cli": "catalog:",
+    "typescript": "catalog:"
+  },
+  "prettier": "@myapp/prettier-config"
+}

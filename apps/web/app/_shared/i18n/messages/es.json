@@ -1,0 +1,121 @@
+{
+  "languages": {
+    "en": "Inglés",
+    "es": "Español"
+  },
+  "common": {
+    "logo": "Logo",
+    "open_menu": "Abrir menú",
+    "close_menu": "Cerrar menú",
+    "company_name": "Acme Inc.",
+    "loading": "Cargando...",
+    "not_available": "N/D"
+  },
+  "auth": {
+    "welcome": "Bienvenido a myapp",
+    "sign_in_with_github": "Iniciar sesión con GitHub",
+    "signing_in": "Iniciando sesión...",
+    "terms_privacy": "Al hacer clic en continuar, aceptas nuestros <terms>Términos de servicio</terms> y <privacy>Política de privacidad</privacy>.",
+    "errors": {
+      "github_signin_failed": "Error al iniciar sesión con GitHub",
+      "generic": "Algo salió mal. Por favor intenta de nuevo."
+    }
+  },
+  "dashboard": {
+    "title": "Auth Playground",
+    "description": "Esta página muestra tus detalles de autenticación y datos de sesión.",
+    "to_test_page": "ir a página de prueba",
+    "auth_status": {
+      "title": "Estado de Autenticación",
+      "description": "Tu estado actual de autenticación",
+      "authenticated": "Autenticado",
+      "not_authenticated": "No Autenticado",
+      "sign_out": "Cerrar sesión",
+      "signing_out": "Cerrando sesión..."
+    },
+    "user_profile": {
+      "title": "Perfil de Usuario",
+      "description": "Información de tu sesión autenticada",
+      "user_id": "ID de Usuario",
+      "name": "Nombre",
+      "email": "Correo",
+      "email_verified": "Correo Verificado",
+      "yes": "Sí",
+      "no": "No",
+      "avatar": "Avatar"
+    },
+    "session_details": {
+      "title": "Detalles de Sesión",
+      "description": "Detalles técnicos sobre tu sesión actual",
+      "session_id": "ID de Sesión",
+      "user_id": "ID de Usuario",
+      "token": "Token",
+      "created_at": "Creado En",
+      "updated_at": "Actualizado En",
+      "expires_at": "Expira En",
+      "ip_address": "Dirección IP",
+      "user_agent": "Agente de Usuario"
+    },
+    "wallet": {
+      "title": "Conexión de Billetera",
+      "description": "Detalles de tu billetera conectada",
+      "connected": "Conectado",
+      "disconnected": "Desconectado",
+      "address": "Dirección",
+      "chain_id": "ID de Cadena",
+      "connector": "Conector"
+    },
+    "raw_data": {
+      "title": "Datos de Sesión Crudos",
+      "description": "Objeto de sesión completo para depuración"
+    }
+  },
+  "landing": {
+    "navigation": {
+      "features": "Características",
+      "solution": "Solución"
+    },
+    "header": {
+      "cta": {
+        "primary": "Empezar"
+      }
+    },
+    "hero": {
+      "title": "(TODO) Título",
+      "description": "(TODO) Descripción",
+      "cta": {
+        "primary": "Empieza ahora",
+        "secondary": "Saber más"
+      }
+    },
+    "features": {
+      "title": "(TODO) Feature 1",
+      "description": "(TODO) Descripción",
+      "items": {
+        "feature1": {
+          "title": "(TODO) Item 1",
+          "description": "(TODO) Descripción"
+        },
+        "feature2": {
+          "title": "(TODO) Item 2",
+          "description": "(TODO) Descripción"
+        },
+        "feature3": {
+          "title": "(TODO) Item 3",
+          "description": "(TODO) Descripción"
+        },
+        "feature4": {
+          "title": "(TODO) Item 4",
+          "description": "(TODO) Descripción"
+        },
+        "feature5": {
+          "title": "(TODO) Item 5",
+          "description": "(TODO) Descripción"
+        }
+      }
+    },
+    "footer": {
+      "copyright": "(TODO) Copyright"
+    }
+  }
+}
