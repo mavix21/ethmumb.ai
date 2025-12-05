@@ -91,7 +91,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const loadMiniApp = React.useCallback(async () => {
     console.log("Loading mini app context...");
     try {
-      await miniappSdk.actions.ready({ disableNativeGestures: true });
+      await miniappSdk.actions.ready();
 
       const isInMiniApp = await miniappSdk.isInMiniApp();
       const context = await miniappSdk.context;
