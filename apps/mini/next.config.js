@@ -10,6 +10,7 @@ const nextConfig = {
   transpilePackages: ["@ethmumb.ai/ui"],
 
   typedRoutes: true,
+  cacheComponents: true,
   typescript: { ignoreBuildErrors: true },
 
   // Server-side packages that should not be bundled
