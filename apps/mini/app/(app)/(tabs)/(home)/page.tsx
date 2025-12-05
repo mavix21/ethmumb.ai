@@ -221,7 +221,7 @@ export default function Home() {
   const { context, isInMiniApp } = useMiniApp();
 
   return (
-    <div className="flex h-svh flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       {/* Header */}
       <header className="border-border/50 flex shrink-0 items-center justify-between border-b px-4 py-3">
         <div className="flex items-center gap-2">
