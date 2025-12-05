@@ -26,8 +26,9 @@
     scroll-behavior: smooth;
   }
 
+  html,
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overscroll-none;
   }
 }
 
