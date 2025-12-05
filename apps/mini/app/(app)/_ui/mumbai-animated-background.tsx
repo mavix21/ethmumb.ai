@@ -116,7 +116,7 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       </div>
 
       {/* Layer 7: Road with vehicles - fastest, foreground */}
-      <div className="animate-scroll-seamless-fast absolute bottom-16 left-0 w-[200%]">
+      <div className="animate-scroll-seamless-fast absolute bottom-15.5 left-0 w-[200%]">
         <div className="flex w-full">
           <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
           <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
