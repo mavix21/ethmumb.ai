@@ -17,7 +17,7 @@ import { sendFarcasterNotification } from "@/lib/farcaster/farcaster-notificatio
 export async function POST(request: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const requestJson = await request.json();
-  console.log("[webhook/farcaster] received:", requestJson);
+  console.warn("[webhook/farcaster] received:", requestJson);
 
   let data: ParseWebhookEventResult;
   try {
