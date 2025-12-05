@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Sora } from "next/font/google";
 import { Suspense } from "react";
+import { Inter, Sora } from "next/font/google";
 import { preconnect } from "react-dom";
 
 import { AuthProvider } from "@/app/_contexts/auth-context";
