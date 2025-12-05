@@ -4,12 +4,8 @@ import type { ReactNode } from "react";
 import * as React from "react";
 import { useMachine } from "@xstate/react";
 
-import type {
-  AvatarError,
-  AvatarEvent,
-  StyleId,
-} from "../_model/avatar-machine";
-import { avatarMachine } from "../_model/avatar-machine";
+import type { AvatarError, AvatarEvent, StyleId } from "./avatar-machine";
+import { avatarMachine } from "./avatar-machine";
 
 interface AvatarContextValue {
   state: ReturnType<typeof useMachine<typeof avatarMachine>>[0];

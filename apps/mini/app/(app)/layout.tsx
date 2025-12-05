@@ -16,6 +16,8 @@ import "@coinbase/onchainkit/styles.css";
 import "@ethmumb.ai/ui/globals.css";
 import "@silk-hq/components/layered-styles.css";
 
+import { Header } from "@/shared/ui/header";
+
 import { MumbaiBackground } from "./_ui/mumbai-animated-background";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,9 +75,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                     >
                       <MumbaiBackground />
                     </div>
-                    <div className="relative z-1">{children}</div>
+                    <div className="relative z-1 flex h-[calc(100svh-4rem)] flex-col">
+                      <Header />
+                      {children}
+                    </div>
+                    <BottomNav showPrimaryAction={false} />
                   </ThemeProvider>
-                  <BottomNav showPrimaryAction={false} />
                 </AuthProvider>
               </ConvexClientProvider>
             </MiniAppProvider>
