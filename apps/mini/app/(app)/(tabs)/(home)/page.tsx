@@ -221,7 +221,7 @@ export default function Home() {
   const { context, isInMiniApp } = useMiniApp();
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
+    <div className="flex h-full flex-col">
       {/* Header */}
       <header className="border-border/50 flex shrink-0 items-center justify-between border-b px-4 py-3">
         <div className="flex items-center gap-2">
@@ -241,7 +241,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="h-full flex-1 space-y-6 overflow-y-scroll px-4 py-6">
+      <main className="flex-1 space-y-6 px-4 py-6">
         {/* Error Banner */}
         {error && (
           <Card className="border-destructive/50 bg-destructive/10">
