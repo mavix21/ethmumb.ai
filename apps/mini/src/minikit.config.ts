@@ -8,9 +8,11 @@ import { ROOT_URL } from "./lib/constants";
  */
 export const minikitConfig = {
   accountAssociation: {
-    header: "",
-    payload: "",
-    signature: "",
+    header:
+      "eyJmaWQiOjExMDg3MDEsInR5cGUiOiJhdXRoIiwia2V5IjoiMHg2QkM0ODJBYkJmMEMyMDRFYUZlODg2ZjE4RDU2OTcwYjhEMkE0N2VlIn0",
+    payload: "eyJkb21haW4iOiJldGhtdW1iYWktdGhyZWUudmVyY2VsLmFwcCJ9",
+    signature:
+      "IbxCIoZeZlkzOxYb2l/Xw5z49GCh+riVa6zbQm/MN7ln7OtJ4p6aHMCDJSuIII9dCh8+MLfKo9cGrxlnvMUSMhw=",
   },
   baseBuilder: {
     ownerAddress: "",
