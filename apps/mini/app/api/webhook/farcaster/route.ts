@@ -78,11 +78,13 @@ export async function POST(request: NextRequest) {
     switch (event.event) {
       case "miniapp_added": {
         // User added the mini app
-        console.log(
+        console.warn(
           "[webhook/farcaster] miniapp_added - user:",
           convexId,
           "isNew:",
           isNew,
+          "event:",
+          event.notificationDetails,
         );
 
         // If notification details are provided, save them
@@ -91,7 +93,11 @@ export async function POST(request: NextRequest) {
             fid,
             notificationDetails: JSON.stringify(event.notificationDetails),
           });
-          await sendFarcasterNotification({
+          console.warn(
+            "[webhook/farcaster] saved notification details for fid:",
+            fid,
+          );
+          const result = await sendFarcasterNotification({
             fid,
             title: `Welcome to ${env.NEXT_PUBLIC_APPLICATION_NAME}!`,
             body: isNew
@@ -99,6 +105,10 @@ export async function POST(request: NextRequest) {
               : "Welcome back!",
             notificationDetails: event.notificationDetails,
           });
+          console.warn(
+            "[webhook/farcaster] sent welcome notification result:",
+            result,
+          );
         }
         break;
       }
@@ -106,7 +116,7 @@ export async function POST(request: NextRequest) {
       case "miniapp_removed": {
         // User removed the mini app - optionally clean up notification details
         await convexClient.action(api.users.removeNotificationDetails, { fid });
-        console.log("[webhook/farcaster] miniapp_removed - fid:", fid);
+        console.warn("[webhook/farcaster] miniapp_removed - fid:", fid);
         break;
       }
 
@@ -116,19 +126,19 @@ export async function POST(request: NextRequest) {
           fid,
           notificationDetails: JSON.stringify(event.notificationDetails),
         });
-        console.log("[webhook/farcaster] notifications_enabled - fid:", fid);
+        console.warn("[webhook/farcaster] notifications_enabled - fid:", fid);
         break;
       }
 
       case "notifications_disabled": {
         // User disabled notifications
         await convexClient.action(api.users.removeNotificationDetails, { fid });
-        console.log("[webhook/farcaster] notifications_disabled - fid:", fid);
+        console.warn("[webhook/farcaster] notifications_disabled - fid:", fid);
         break;
       }
 
       default:
-        console.log("[webhook/farcaster] unhandled event:", event);
+        console.warn("[webhook/farcaster] unhandled event:", event);
         return Response.json(
           { success: false, error: "Unknown event" },
           { status: 400 },
