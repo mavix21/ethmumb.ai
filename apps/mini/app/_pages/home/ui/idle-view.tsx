@@ -76,6 +76,7 @@ export function IdleView() {
               alt="Original photo before transformation"
               className="h-full w-full object-cover"
               fill
+              sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
             />
           </div>
         </div>
