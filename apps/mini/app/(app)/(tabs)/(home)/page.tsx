@@ -154,7 +154,7 @@ interface QuickActionProps {
 
 function QuickAction({ href, icon, label, description }: QuickActionProps) {
   return (
-    <Link href={href} className="block">
+    <Link href={href} className="block" scroll={false}>
       <Card className="hover:bg-accent/50 hover:border-accent h-full transition-all active:scale-[0.98]">
         <CardContent className="flex items-center gap-3">
           <div className="bg-primary/10 flex size-10 shrink-0 items-center justify-center rounded-lg">
