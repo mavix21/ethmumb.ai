@@ -7,63 +7,75 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/10" />
 
       {/* Layer 1: Distant clouds - slowest, moving right */}
-      <div className="animate-scroll-right-seamless absolute top-8 left-0 w-[200%] opacity-20">
+      <div className="animate-scroll-right-seamless absolute top-4 left-0 w-[200%] opacity-20 md:top-8">
         <div className="flex w-full">
-          <div className="flex w-1/2 shrink-0 gap-48">
-            {[...(Array(4) as unknown[])].map((_, i) => (
-              <CloudShape key={`cloud-1a-${i}`} className="h-16 w-32" />
+          <div className="flex w-1/2 shrink-0 gap-24 md:gap-48">
+            {[...Array<unknown>(4)].map((_, i) => (
+              <CloudShape
+                key={`cloud-1a-${i}`}
+                className="h-8 w-16 md:h-16 md:w-32"
+              />
             ))}
           </div>
-          <div className="flex w-1/2 shrink-0 gap-48">
-            {[...(Array(4) as unknown[])].map((_, i) => (
-              <CloudShape key={`cloud-1b-${i}`} className="h-16 w-32" />
+          <div className="flex w-1/2 shrink-0 gap-24 md:gap-48">
+            {[...Array<unknown>(4)].map((_, i) => (
+              <CloudShape
+                key={`cloud-1b-${i}`}
+                className="h-8 w-16 md:h-16 md:w-32"
+              />
             ))}
           </div>
         </div>
       </div>
 
       {/* Layer 2: Mid clouds - slow */}
-      <div className="animate-scroll-seamless-slow absolute top-20 left-0 w-[200%] opacity-30">
+      <div className="animate-scroll-seamless-slow absolute top-12 left-0 w-[200%] opacity-30 md:top-20">
         <div className="flex w-full">
-          <div className="flex w-1/2 shrink-0 items-center justify-around gap-64">
-            {[...(Array(3) as unknown[])].map((_, i) => (
-              <CloudShape key={`cloud-2a-${i}`} className="h-12 w-24" />
+          <div className="flex w-1/2 shrink-0 items-center justify-around gap-32 md:gap-64">
+            {[...Array<unknown>(3)].map((_, i) => (
+              <CloudShape
+                key={`cloud-2a-${i}`}
+                className="h-6 w-12 md:h-12 md:w-24"
+              />
             ))}
           </div>
-          <div className="flex w-1/2 shrink-0 items-center justify-around gap-64">
-            {[...(Array(3) as unknown[])].map((_, i) => (
-              <CloudShape key={`cloud-2b-${i}`} className="h-12 w-24" />
+          <div className="flex w-1/2 shrink-0 items-center justify-around gap-32 md:gap-64">
+            {[...Array<unknown>(3)].map((_, i) => (
+              <CloudShape
+                key={`cloud-2b-${i}`}
+                className="h-6 w-12 md:h-12 md:w-24"
+              />
             ))}
           </div>
         </div>
       </div>
 
       {/* Layer 3: Hot air balloons - medium speed with bob animation */}
-      <div className="animate-scroll-seamless-medium absolute top-16 left-0 w-[200%]">
+      <div className="animate-scroll-seamless-medium absolute top-8 left-0 w-[200%] md:top-16">
         <div className="flex w-full">
           <div className="flex w-1/2 shrink-0 items-end justify-around">
-            {[...(Array(2) as unknown[])].map((_, i) => (
+            {[...Array<unknown>(2)].map((_, i) => (
               <div
                 key={`balloon-a-${i}`}
                 className="animate-bob"
                 style={{ animationDelay: `${i * 0.7}s` }}
               >
                 <HotAirBalloon
-                  className="h-20 w-14 md:h-24 md:w-16"
+                  className="h-14 w-10 md:h-24 md:w-16"
                   variant={i % 2 === 0 ? "yellow" : "blue"}
                 />
               </div>
             ))}
           </div>
           <div className="flex w-1/2 shrink-0 items-end justify-around">
-            {[...(Array(2) as unknown[])].map((_, i) => (
+            {[...Array<unknown>(2)].map((_, i) => (
               <div
                 key={`balloon-b-${i}`}
                 className="animate-bob"
                 style={{ animationDelay: `${i * 0.7}s` }}
               >
                 <HotAirBalloon
-                  className="h-20 w-14 md:h-24 md:w-16"
+                  className="h-14 w-10 md:h-24 md:w-16"
                   variant={i % 2 === 0 ? "yellow" : "blue"}
                 />
               </div>
@@ -74,15 +86,15 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
 
       {/* Layer 4: Airplanes - moving forward (right) */}
       <div
-        className="animate-scroll-right-seamless absolute top-12 left-0 hidden w-[200%] md:block"
+        className="animate-scroll-right-seamless absolute top-6 left-0 w-[200%] md:top-12"
         style={{ animationDuration: "40s" }}
       >
         <div className="flex w-full">
           <div className="flex w-1/2 shrink-0 items-center justify-around">
-            <Airplane className="h-10 w-20" direction="right" />
+            <Airplane className="h-6 w-12 md:h-10 md:w-20" direction="right" />
           </div>
           <div className="flex w-1/2 shrink-0 items-center justify-around">
-            <Airplane className="h-10 w-20" direction="right" />
+            <Airplane className="h-6 w-12 md:h-10 md:w-20" direction="right" />
           </div>
         </div>
       </div>
@@ -90,33 +102,33 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       {/* Layer 5: Distant buildings silhouette - slow parallax */}
       <div className="animate-scroll-seamless-slow absolute bottom-12 left-0 w-[200%]">
         <div className="flex w-full">
-          <DistantSkyline className="h-24 w-1/2 shrink-0 md:h-32" />
-          <DistantSkyline className="h-24 w-1/2 shrink-0 md:h-32" />
+          <DistantSkyline className="h-16 w-1/2 shrink-0 md:h-32" />
+          <DistantSkyline className="h-16 w-1/2 shrink-0 md:h-32" />
         </div>
       </div>
 
       {/* Layer 6: Main Mumbai skyline with landmarks - medium speed */}
       <div className="animate-scroll-seamless-medium absolute bottom-0 left-0 w-[200%]">
         <div className="flex w-full">
-          <MumbaiSkyline className="h-40 w-1/2 shrink-0 md:h-56" />
-          <MumbaiSkyline className="h-40 w-1/2 shrink-0 md:h-56" />
+          <MumbaiSkyline className="h-28 w-1/2 shrink-0 md:h-56" />
+          <MumbaiSkyline className="h-28 w-1/2 shrink-0 md:h-56" />
         </div>
       </div>
 
       {/* Layer 7: Road with vehicles - fastest, foreground */}
       <div className="animate-scroll-seamless-fast absolute bottom-0 left-0 w-[200%]">
         <div className="flex w-full">
-          <RoadWithVehicles className="h-12 w-1/2 shrink-0" />
-          <RoadWithVehicles className="h-12 w-1/2 shrink-0" />
+          <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
+          <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
         </div>
       </div>
 
       {/* Fixed decorative elements that float */}
-      <div className="animate-float-slow absolute top-[15%] right-[5%] hidden opacity-60 lg:block">
+      <div className="animate-float-slow absolute top-[15%] right-[5%] hidden opacity-60 md:block">
         <EthereumDiamond className="h-10 w-8" />
       </div>
       <div
-        className="animate-float absolute top-[25%] left-[8%] hidden opacity-50 lg:block"
+        className="animate-float absolute top-[25%] left-[8%] hidden opacity-50 md:block"
         style={{ animationDelay: "1s" }}
       >
         <EthereumDiamond className="h-8 w-6" />
@@ -167,8 +179,8 @@ const HotAirBalloon = memo(function HotAirBalloon({
         fill="none"
       />
       <rect x="24" y="72" width="16" height="10" rx="2" fill="#1C1C1C" />
-      <line x1="24" y1="72" x2="22" y2="52" stroke="#1C1C1C" strokeWidth="1" />
-      <line x1="40" y1="72" x2="42" y2="52" stroke="#1C1C1C" strokeWidth="1" />
+      <circle cx="8" cy="26" r="4" fill="#1C1C1C" />
+      <circle cx="48" cy="26" r="4" fill="#1C1C1C" />
     </svg>
   );
 });
