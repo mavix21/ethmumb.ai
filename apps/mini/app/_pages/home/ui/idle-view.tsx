@@ -2,6 +2,7 @@ import * as React from "react";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
+import { Badge } from "@ethmumb.ai/ui/components/badge";
 import { Button } from "@ethmumb.ai/ui/components/button";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
@@ -126,12 +127,9 @@ export function IdleView() {
         <span className="text-xs md:text-sm">Image format:</span>
         <div className="flex flex-wrap justify-center gap-1.5 md:gap-2">
           {["JPG", "JPEG", "PNG", "WEBP"].map((format) => (
-            <span
-              key={format}
-              className="bg-secondary text-foreground rounded px-2 py-0.5 text-[10px] font-medium md:text-xs"
-            >
+            <Badge key={format} variant="secondary">
               {format}
-            </span>
+            </Badge>
           ))}
         </div>
       </div>
