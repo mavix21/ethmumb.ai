@@ -14,6 +14,7 @@ interface AvatarContextValue {
   isIdle: boolean;
   isAnalyzing: boolean;
   isNsfwViolation: boolean;
+  isNsfwModelLoading: boolean;
   isUserConfirming: boolean;
   isPaying: boolean;
   isProcessing: boolean;
@@ -37,6 +38,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     isIdle: state.matches("idle"),
     isAnalyzing: state.matches("analyzing"),
     isNsfwViolation: state.matches("nsfw_violation"),
+    isNsfwModelLoading: state.context.isModelLoading,
     isUserConfirming: state.matches("user_confirming"),
     isPaying: state.matches("paying"),
     isProcessing: state.matches("processing"),
