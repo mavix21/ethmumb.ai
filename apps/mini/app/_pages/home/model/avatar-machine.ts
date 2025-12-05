@@ -49,7 +49,7 @@ export interface AvatarContext {
   generatedImage: string | null;
   error: AvatarError | null;
   nsfwModel: nsfwjs.NSFWJS | null;
-  nsfwModelLoading: Promise<nsfwjs.NSFWJS> | null;
+  isModelLoading: boolean;
   nsfwScore: number | null;
 }
 
@@ -99,7 +99,6 @@ const loadModelActor = fromPromise<nsfwjs.NSFWJS, void>(async () => {
 interface AnalyzeImageInput {
   file: File;
   model: nsfwjs.NSFWJS | null;
-  modelPromise: Promise<nsfwjs.NSFWJS> | null;
 }
 
 interface AnalyzeImageOutput {
@@ -109,12 +108,7 @@ interface AnalyzeImageOutput {
 
 const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
   async ({ input }) => {
-    let model = input.model;
-
-    // Wait for model if still loading
-    if (!model && input.modelPromise) {
-      model = await input.modelPromise;
-    }
+    const model = input.model;
 
     if (!model) {
       throw new Error("NSFW model not available");
@@ -241,7 +235,7 @@ export const avatarMachine = setup({
     generatedImage: null,
     error: null,
     nsfwModel: null,
-    nsfwModelLoading: null,
+    isModelLoading: true,
     nsfwScore: null,
   },
   invoke: {
@@ -250,13 +244,13 @@ export const avatarMachine = setup({
     onDone: {
       actions: assign({
         nsfwModel: ({ event }) => event.output,
-        nsfwModelLoading: () => null,
+        isModelLoading: () => false,
       }),
     },
     onError: {
       // Model failed to load - continue anyway, will handle in analyzing step
       actions: assign({
-        nsfwModelLoading: () => null,
+        isModelLoading: () => false,
       }),
     },
   },
@@ -286,7 +280,6 @@ export const avatarMachine = setup({
           return {
             file: context.uploadedFile,
             model: context.nsfwModel,
-            modelPromise: context.nsfwModelLoading,
           };
         },
         onDone: [
