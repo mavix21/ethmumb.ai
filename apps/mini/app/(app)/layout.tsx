@@ -75,7 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                     </div>
                     <div className="relative z-1">{children}</div>
                   </ThemeProvider>
-                  {/* <BottomNav /> */}
+                  <BottomNav showPrimaryAction={false} />
                 </AuthProvider>
               </ConvexClientProvider>
             </MiniAppProvider>

@@ -172,7 +172,7 @@ export function BottomNav({
   return (
     <nav
       className={cn(
-        "border-border/40 bg-card fixed right-0 -bottom-px left-0 z-1 border-t",
+        "border-border/40 bg-card fixed right-0 -bottom-px left-0 z-1 h-16 border-t",
         className,
       )}
       aria-label="Main navigation"

@@ -100,7 +100,7 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       </div>
 
       {/* Layer 5: Distant buildings silhouette - slow parallax */}
-      <div className="animate-scroll-seamless-slow absolute bottom-12 left-0 w-[200%]">
+      <div className="animate-scroll-seamless-slow absolute bottom-28 left-0 w-[200%]">
         <div className="flex w-full">
           <DistantSkyline className="h-16 w-1/2 shrink-0 md:h-32" />
           <DistantSkyline className="h-16 w-1/2 shrink-0 md:h-32" />
@@ -108,7 +108,7 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       </div>
 
       {/* Layer 6: Main Mumbai skyline with landmarks - medium speed */}
-      <div className="animate-scroll-seamless-medium absolute bottom-0 left-0 w-[200%]">
+      <div className="animate-scroll-seamless-medium absolute bottom-16 left-0 w-[200%]">
         <div className="flex w-full">
           <MumbaiSkyline className="h-28 w-1/2 shrink-0 md:h-56" />
           <MumbaiSkyline className="h-28 w-1/2 shrink-0 md:h-56" />
@@ -116,7 +116,7 @@ export const MumbaiBackground = memo(function MumbaiBackground() {
       </div>
 
       {/* Layer 7: Road with vehicles - fastest, foreground */}
-      <div className="animate-scroll-seamless-fast absolute bottom-0 left-0 w-[200%]">
+      <div className="animate-scroll-seamless-fast absolute bottom-16 left-0 w-[200%]">
         <div className="flex w-full">
           <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
           <RoadWithVehicles className="h-10 w-1/2 shrink-0 md:h-12" />
