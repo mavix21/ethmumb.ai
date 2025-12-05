@@ -3,7 +3,6 @@
 import type { Route } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Wallet } from "@coinbase/onchainkit/wallet";
 import {
   AlertCircle,
   ChevronRight,
@@ -32,7 +31,7 @@ import { CardSheet } from "@ethmumb.ai/ui/components/card-sheet/index";
 import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useAuth } from "@/app/_contexts/auth-context";
-import { useMiniApp } from "@/app/_contexts/miniapp-context";
+import { useMiniApp } from "@/shared/context/miniapp-context";
 
 interface FeatureDetails {
   icon: React.ReactNode;
@@ -224,20 +223,16 @@ export default function Home() {
     <div className="flex h-full flex-col">
       {/* Header */}
       <header className="border-border/50 flex shrink-0 items-center justify-between border-b px-4 py-3">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 rounded-full bg-white px-2">
           <Image
             priority
-            src="/sphere.svg"
+            src="/ethmumbai.png"
             alt="App Logo"
-            width={28}
-            height={28}
+            width={105}
+            height={36}
             className="shrink-0"
           />
-          <span className="font-accent text-foreground font-semibold">
-            MiniKit
-          </span>
         </div>
-        <Wallet />
       </header>
 
       {/* Main Content */}
