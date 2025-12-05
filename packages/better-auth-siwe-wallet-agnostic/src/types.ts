@@ -57,13 +57,13 @@ export interface SiweWalletAgnosticOptions {
    * REQUIRED: Must EXACTLY match `window.location.host` on the client.
    *
    * Per EIP-4361, this is the RFC 3986 "authority" which is host[:port].
-   * - For standard ports (80/443), browsers omit the port: "myapp.com"
+   * - For standard ports (80/443), browsers omit the port: "ethmumb.ai.com"
    * - For non-standard ports, include it: "localhost:3000"
    *
    * This prevents cross-domain replay attacks. An attacker cannot use
-   * a SIWE message signed for "evil.com" to authenticate on "myapp.com".
+   * a SIWE message signed for "evil.com" to authenticate on "ethmumb.ai.com".
    *
-   * @example "myapp.com" for production (HTTPS on port 443)
+   * @example "ethmumb.ai.com" for production (HTTPS on port 443)
    * @example "localhost:3000" for local development
    */
   domain: string;
@@ -73,10 +73,10 @@ export interface SiweWalletAgnosticOptions {
    * REQUIRED: Must EXACTLY match `window.location.origin` on the client.
    *
    * This is the full origin URL including protocol.
-   * - For standard ports: "https://myapp.com"
+   * - For standard ports: "https://ethmumb.ai.com"
    * - For non-standard ports: "http://localhost:3000"
    *
-   * @example "https://myapp.com" for production
+   * @example "https://ethmumb.ai.com" for production
    * @example "http://localhost:3000" for local development
    */
   uri: string;
@@ -128,7 +128,7 @@ export interface SiweWalletAgnosticOptions {
    * Used to generate placeholder emails: `{walletAddress}@{emailDomainName}`
    * If not provided, falls back to `domain` or "wallet.local"
    *
-   * @example "myapp.com" → "0x123...abc@myapp.com"
+   * @example "ethmumb.ai.com" → "0x123...abc@ethmumb.ai.com"
    */
   emailDomainName?: string;
 

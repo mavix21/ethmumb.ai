@@ -5,8 +5,8 @@ import {
   Field,
   FieldDescription,
   FieldGroup,
-} from "@myapp/ui/components/field";
-import { cn } from "@myapp/ui/lib/utils";
+} from "@ethmumb.ai/ui/components/field";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { OAuthErrorHandler } from "@/widgets/auth/oauth-error-handler";
 import { SignInWithGitHub } from "@/widgets/auth/sign-in-with-github";

@@ -351,14 +351,14 @@ export const siweWalletAgnostic = (
   // Validate domain format (no protocol, just hostname)
   if (domain.includes("://")) {
     throw new Error(
-      "[siwe-wallet-agnostic] 'domain' should be a hostname without protocol (e.g., 'myapp.com' not 'https://myapp.com')",
+      "[siwe-wallet-agnostic] 'domain' should be a hostname without protocol (e.g., 'ethmumb.ai.com' not 'https://ethmumb.ai.com')",
     );
   }
 
   // Validate URI format (must have protocol)
   if (!uri.startsWith("http://") && !uri.startsWith("https://")) {
     throw new Error(
-      "[siwe-wallet-agnostic] 'uri' must include protocol (e.g., 'https://myapp.com')",
+      "[siwe-wallet-agnostic] 'uri' must include protocol (e.g., 'https://ethmumb.ai.com')",
     );
   }
 

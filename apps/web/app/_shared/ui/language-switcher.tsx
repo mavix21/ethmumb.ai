@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@myapp/ui/components/select";
+} from "@ethmumb.ai/ui/components/select";
 
 import { usePathname, useRouter } from "@/shared/i18n";
 

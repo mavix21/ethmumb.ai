@@ -12,7 +12,7 @@ import { OnchainKitClientProvider } from "./_providers/onchainkit.provider";
 import { ThemeProvider } from "./_providers/theme-provider";
 
 import "@coinbase/onchainkit/styles.css";
-import "@myapp/ui/globals.css";
+import "@ethmumb.ai/ui/globals.css";
 import "@silk-hq/components/layered-styles.css";
 
 export async function generateMetadata(): Promise<Metadata> {

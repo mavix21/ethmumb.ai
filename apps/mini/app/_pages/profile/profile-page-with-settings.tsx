@@ -4,8 +4,8 @@ import type { TravelStatus } from "@silk-hq/components";
 import { useState } from "react";
 import { Settings } from "lucide-react";
 
-import { Button } from "@myapp/ui/components/button";
-import { Page } from "@myapp/ui/components/page/index";
+import { Button } from "@ethmumb.ai/ui/components/button";
+import { Page } from "@ethmumb.ai/ui/components/page/index";
 
 import { ProfileContent } from "@/pages/profile/profile-content";
 

@@ -6,15 +6,15 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@myapp/ui/components/avatar";
-import { Badge } from "@myapp/ui/components/badge";
+} from "@ethmumb.ai/ui/components/avatar";
+import { Badge } from "@ethmumb.ai/ui/components/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@myapp/ui/components/card";
+} from "@ethmumb.ai/ui/components/card";
 
 interface DiscoverItem {
   id: string;

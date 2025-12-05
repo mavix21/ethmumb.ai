@@ -19,17 +19,17 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@myapp/ui/components/avatar";
-import { Button } from "@myapp/ui/components/button";
+} from "@ethmumb.ai/ui/components/avatar";
+import { Button } from "@ethmumb.ai/ui/components/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@myapp/ui/components/card";
-import { CardSheet } from "@myapp/ui/components/card-sheet/index";
-import { Skeleton } from "@myapp/ui/components/skeleton";
+} from "@ethmumb.ai/ui/components/card";
+import { CardSheet } from "@ethmumb.ai/ui/components/card-sheet/index";
+import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useAuth } from "@/app/_contexts/auth-context";
 import { useMiniApp } from "@/app/_contexts/miniapp-context";

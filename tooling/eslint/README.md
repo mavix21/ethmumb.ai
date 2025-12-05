@@ -1,3 +1,3 @@
-# `@myapp/eslint-config`
+# `@ethmumb.ai/eslint-config`
 
 Shared eslint configuration for the workspace.

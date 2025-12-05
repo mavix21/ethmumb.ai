@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@myapp/ui/components/card";
+import { Card, CardContent } from "@ethmumb.ai/ui/components/card";
 
 import { LoginForm } from "./ui/login-form";
 

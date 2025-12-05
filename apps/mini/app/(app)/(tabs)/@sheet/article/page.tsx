@@ -1,6 +1,6 @@
 "use client";
 
-import { LongSheet } from "@myapp/ui/components/long-sheet/index";
+import { LongSheet } from "@ethmumb.ai/ui/components/long-sheet/index";
 
 import { ArticleContent } from "@/pages/article/article-content";
 import { useSheetPage } from "@/shared/hooks/use-sheet-page";

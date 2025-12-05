@@ -6,25 +6,25 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
 
-import { Button } from "@myapp/ui/components/button";
-import { Input } from "@myapp/ui/components/input";
-import { Separator } from "@myapp/ui/components/separator";
+import { Button } from "@ethmumb.ai/ui/components/button";
+import { Input } from "@ethmumb.ai/ui/components/input";
+import { Separator } from "@ethmumb.ai/ui/components/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@myapp/ui/components/sheet";
-import { Skeleton } from "@myapp/ui/components/skeleton";
+} from "@ethmumb.ai/ui/components/sheet";
+import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@myapp/ui/components/tooltip";
-import { useIsMobile } from "@myapp/ui/hooks/use-mobile";
-import { cn } from "@myapp/ui/lib/utils";
+} from "@ethmumb.ai/ui/components/tooltip";
+import { useIsMobile } from "@ethmumb.ai/ui/hooks/use-mobile";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

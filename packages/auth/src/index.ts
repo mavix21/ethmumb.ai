@@ -8,7 +8,7 @@ import { siwe } from "better-auth/plugins";
 import { createPublicClient, getAddress, http } from "viem";
 import { mainnet } from "viem/chains";
 
-import siweWalletAgnostic from "@myapp/better-auth-siwe-wallet-agnostic";
+import siweWalletAgnostic from "@ethmumb.ai/better-auth-siwe-wallet-agnostic";
 
 interface InitAuthOptions<
   TExtraPlugins extends BetterAuthPlugin[],

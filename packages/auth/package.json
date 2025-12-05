@@ -1,5 +1,5 @@
 {
-  "name": "@myapp/auth",
+  "name": "@ethmumb.ai/auth",
   "private": true,
   "type": "module",
   "exports": {
@@ -17,7 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@myapp/better-auth-siwe-wallet-agnostic": "workspace:*",
+    "@ethmumb.ai/better-auth-siwe-wallet-agnostic": "workspace:*",
     "@t3-oss/env-core": "^0.13.8",
     "better-auth": "catalog:",
     "better-auth-siwf": "^1.0.20",
@@ -26,12 +26,12 @@
   },
   "devDependencies": {
     "@better-auth/cli": "catalog:",
-    "@myapp/eslint-config": "workspace:*",
-    "@myapp/prettier-config": "workspace:*",
-    "@myapp/tsconfig": "workspace:*",
+    "@ethmumb.ai/eslint-config": "workspace:*",
+    "@ethmumb.ai/prettier-config": "workspace:*",
+    "@ethmumb.ai/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
   },
-  "prettier": "@myapp/prettier-config"
+  "prettier": "@ethmumb.ai/prettier-config"
 }

@@ -10,8 +10,8 @@
     "lint": "eslint --flag unstable_native_nodejs_ts_config"
   },
   "devDependencies": {
-    "@myapp/eslint-config": "workspace:*",
-    "@myapp/tsconfig": "workspace:*",
+    "@ethmumb.ai/eslint-config": "workspace:*",
+    "@ethmumb.ai/tsconfig": "workspace:*",
     "@nomicfoundation/hardhat-ignition": "^3.0.5",
     "@nomicfoundation/hardhat-ignition-viem": "^3.0.5",
     "@nomicfoundation/hardhat-keystore": "^3.0.3",
@@ -31,5 +31,5 @@
     "typescript": "catalog:",
     "viem": "^2.40.3"
   },
-  "prettier": "@myapp/prettier-config"
+  "prettier": "@ethmumb.ai/prettier-config"
 }

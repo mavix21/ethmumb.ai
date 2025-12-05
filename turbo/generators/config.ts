@@ -10,13 +10,13 @@ interface PackageJson {
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
   plop.setGenerator("init", {
-    description: "Generate a new package for the myapp Monorepo",
+    description: "Generate a new package for the ethmumb.ai Monorepo",
     prompts: [
       {
         type: "input",
         name: "name",
         message:
-          "What is the name of the package? (You can skip the `@myapp/` prefix)",
+          "What is the name of the package? (You can skip the `@ethmumb.ai/` prefix)",
       },
       {
         type: "input",
@@ -28,8 +28,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
     actions: [
       (answers) => {
         if ("name" in answers && typeof answers.name === "string") {
-          if (answers.name.startsWith("@myapp/")) {
-            answers.name = answers.name.replace("@myapp/", "");
+          if (answers.name.startsWith("@ethmumb.ai/")) {
+            answers.name = answers.name.replace("@ethmumb.ai/", "");
           }
         }
         return "Config sanitized";

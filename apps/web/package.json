@@ -19,10 +19,9 @@
     "@base-org/account-ui": "latest",
     "@coinbase/onchainkit": "latest",
     "@convex-dev/better-auth": "^0.9.11",
-    "@myapp/better-auth-siwe-wallet-agnostic": "workspace:*",
-    "@myapp/convex": "workspace:*",
-    "@myapp/db": "workspace:*",
-    "@myapp/ui": "workspace:*",
+    "@ethmumb.ai/better-auth-siwe-wallet-agnostic": "workspace:*",
+    "@ethmumb.ai/convex": "workspace:*",
+    "@ethmumb.ai/ui": "workspace:*",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@t3-oss/env-nextjs": "^0.13.8",
@@ -46,8 +45,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@myapp/eslint-config": "workspace:*",
-    "@myapp/tsconfig": "workspace:*",
+    "@ethmumb.ai/eslint-config": "workspace:*",
+    "@ethmumb.ai/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
@@ -60,5 +59,5 @@
   "overrides": {
     "@base-org/account": "2.2.0"
   },
-  "prettier": "@myapp/prettier-config"
+  "prettier": "@ethmumb.ai/prettier-config"
 }

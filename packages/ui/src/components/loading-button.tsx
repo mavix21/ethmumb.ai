@@ -5,7 +5,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { AnimatePresence, motion } from "motion/react";
 
-import { cn } from "@myapp/ui/lib/utils";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { buttonVariants } from "./button";
 import { Spinner } from "./spinner";

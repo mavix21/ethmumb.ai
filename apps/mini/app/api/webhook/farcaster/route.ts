@@ -8,7 +8,7 @@ import {
   verifyAppKeyWithNeynar,
 } from "@farcaster/miniapp-node";
 
-import { api } from "@myapp/convex/_generated/api";
+import { api } from "@ethmumb.ai/convex/_generated/api";
 
 import { env } from "@/env";
 import { convexClient } from "@/lib/convex";

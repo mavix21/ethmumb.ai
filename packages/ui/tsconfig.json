@@ -1,9 +1,9 @@
 {
-  "extends": "@myapp/tsconfig/react-library.json",
+  "extends": "@ethmumb.ai/tsconfig/react-library.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@myapp/ui/*": ["./src/*"]
+      "@ethmumb.ai/ui/*": ["./src/*"]
     },
     "lib": ["dom", "DOM.Iterable"]
   },

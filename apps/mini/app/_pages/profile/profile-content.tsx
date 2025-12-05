@@ -14,17 +14,17 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@myapp/ui/components/avatar";
-import { Badge } from "@myapp/ui/components/badge";
+} from "@ethmumb.ai/ui/components/avatar";
+import { Badge } from "@ethmumb.ai/ui/components/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@myapp/ui/components/card";
-import { Separator } from "@myapp/ui/components/separator";
-import { Skeleton } from "@myapp/ui/components/skeleton";
+} from "@ethmumb.ai/ui/components/card";
+import { Separator } from "@ethmumb.ai/ui/components/separator";
+import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useMiniApp } from "@/app/_contexts/miniapp-context";
 

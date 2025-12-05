@@ -3,15 +3,15 @@
 import Image from "next/image";
 import { useAccount, useChainId } from "wagmi";
 
-import { Badge } from "@myapp/ui/components/badge";
+import { Badge } from "@ethmumb.ai/ui/components/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@myapp/ui/components/card";
-import { Separator } from "@myapp/ui/components/separator";
+} from "@ethmumb.ai/ui/components/card";
+import { Separator } from "@ethmumb.ai/ui/components/separator";
 
 import { useAuth } from "@/app/_contexts/auth-context";
 import { useMiniApp } from "@/app/_contexts/miniapp-context";

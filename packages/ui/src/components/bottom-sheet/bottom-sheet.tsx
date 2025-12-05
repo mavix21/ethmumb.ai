@@ -3,8 +3,8 @@
 import React from "react";
 import { Sheet } from "@silk-hq/components";
 
-import { useBlurOnTravelStart } from "@myapp/ui/hooks/use-blur-on-travel-start";
-import { cn } from "@myapp/ui/lib/utils";
+import { useBlurOnTravelStart } from "@ethmumb.ai/ui/hooks/use-blur-on-travel-start";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 // ================================================================================================
 // Root

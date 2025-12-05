@@ -3,7 +3,7 @@
 import type { HTMLMotionProps } from "motion/react";
 import { motion } from "motion/react";
 
-import { cn } from "@myapp/ui/lib/utils";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 export const GRADIENT_ANGLES = {
   top: 0,

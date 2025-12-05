@@ -10,8 +10,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@myapp/ui/components/dialog";
-import { cn } from "@myapp/ui/lib/utils";
+} from "@ethmumb.ai/ui/components/dialog";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 function Command({
   className,

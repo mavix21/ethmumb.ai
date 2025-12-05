@@ -1,5 +1,5 @@
 {
-  "extends": "@myapp/tsconfig/nextjs.json",
+  "extends": "@ethmumb.ai/tsconfig/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

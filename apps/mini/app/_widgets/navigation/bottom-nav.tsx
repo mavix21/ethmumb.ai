@@ -7,8 +7,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Calendar, Search, Users, Wallet } from "lucide-react";
 
-import { Button } from "@myapp/ui/components/button";
-import { cn } from "@myapp/ui/lib/utils";
+import { Button } from "@ethmumb.ai/ui/components/button";
+import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { PrimaryActionButton } from "./primary-action-button";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { BottomSheet } from "@myapp/ui/components/bottom-sheet/index";
+import { BottomSheet } from "@ethmumb.ai/ui/components/bottom-sheet/index";
 
 import { SettingsContent } from "@/pages/settings/settings-content";
 import { useSheetPage } from "@/shared/hooks/use-sheet-page";

@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@myapp/tailwind-config/theme";
+@import "@ethmumb.ai/tailwind-config/theme";
 @import "../components/long-sheet/long-sheet.css";
 @import "../components/page-from-bottom/page-from-bottom.css";
 @import "../components/page/page.css";

@@ -17,12 +17,12 @@
   "dependencies": {
     "@coinbase/onchainkit": "latest",
     "@convex-dev/better-auth": "^0.9.11",
+    "@ethmumb.ai/auth": "workspace:*",
+    "@ethmumb.ai/convex": "workspace:*",
+    "@ethmumb.ai/ui": "workspace:*",
     "@farcaster/miniapp-core": "^0.4.1",
     "@farcaster/miniapp-node": "^0.1.11",
     "@farcaster/miniapp-sdk": "^0.2.1",
-    "@myapp/auth": "workspace:*",
-    "@myapp/convex": "workspace:*",
-    "@myapp/ui": "workspace:*",
     "@silk-hq/components": "^0.10.0",
     "@t3-oss/env-nextjs": "^0.13.8",
     "@tailwindcss/postcss": "catalog:",
@@ -46,8 +46,8 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@myapp/eslint-config": "workspace:*",
-    "@myapp/tsconfig": "workspace:*",
+    "@ethmumb.ai/eslint-config": "workspace:*",
+    "@ethmumb.ai/tsconfig": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
@@ -56,5 +56,5 @@
     "jiti": "^2.6.1",
     "typescript": "catalog:"
   },
-  "prettier": "@myapp/prettier-config"
+  "prettier": "@ethmumb.ai/prettier-config"
 }

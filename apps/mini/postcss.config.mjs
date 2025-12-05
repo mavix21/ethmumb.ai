@@ -1,1 +1,1 @@
-export { default } from "@myapp/ui/postcss.config";
+export { default } from "@ethmumb.ai/ui/postcss.config";

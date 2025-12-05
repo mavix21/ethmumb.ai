@@ -16,11 +16,11 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@myapp/ui/components/avatar";
-import { Badge } from "@myapp/ui/components/badge";
-import { Button } from "@myapp/ui/components/button";
-import { Card, CardContent } from "@myapp/ui/components/card";
-import { Skeleton } from "@myapp/ui/components/skeleton";
+} from "@ethmumb.ai/ui/components/avatar";
+import { Badge } from "@ethmumb.ai/ui/components/badge";
+import { Button } from "@ethmumb.ai/ui/components/button";
+import { Card, CardContent } from "@ethmumb.ai/ui/components/card";
+import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useAuth } from "@/app/_contexts/auth-context";
 import { useAddMiniApp, useMiniApp } from "@/app/_contexts/miniapp-context";

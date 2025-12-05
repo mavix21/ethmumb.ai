@@ -29,7 +29,7 @@ export const env = createEnv({
     NEXT_PUBLIC_ONCHAINKIT_API_KEY: z.string(),
     NEXT_PUBLIC_ONCHAINKIT_PROJECT_ID: z.string().optional(),
     NEXT_PUBLIC_CONVEX_URL: z.url(),
-    NEXT_PUBLIC_APPLICATION_NAME: z.string().default("MyApp"),
+    NEXT_PUBLIC_APPLICATION_NAME: z.string().default("ethmumb.ai"),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.

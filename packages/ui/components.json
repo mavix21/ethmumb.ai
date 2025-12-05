@@ -11,10 +11,10 @@
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@myapp/ui/components",
-    "utils": "@myapp/ui/lib/utils",
-    "hooks": "@myapp/ui/hooks",
-    "lib": "@myapp/ui/lib",
-    "ui": "@myapp/ui/components"
+    "components": "@ethmumb.ai/ui/components",
+    "utils": "@ethmumb.ai/ui/lib/utils",
+    "hooks": "@ethmumb.ai/ui/hooks",
+    "lib": "@ethmumb.ai/ui/lib",
+    "ui": "@ethmumb.ai/ui/components"
   }
 }
