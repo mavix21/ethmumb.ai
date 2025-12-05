@@ -67,3 +67,156 @@
     height: 0;
   }
 }
+
+/* Custom utility classes for ETHMumbai brand */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-hindi {
+    font-family: var(--font-hindi);
+  }
+  .bus-signage {
+    @apply rounded-full px-6 py-2;
+  }
+
+  /* Hide scrollbar for horizontal scroll on mobile */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Added scan animation for analyzing view */
+@keyframes scan {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: calc(100% - 4px);
+  }
+  100% {
+    top: 0;
+  }
+}
+
+.animate-scan {
+  animation: scan 1.5s ease-in-out infinite;
+}
+
+/* Added float animation for decorative elements */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-15px) translateX(5px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+/* Seamless infinite scroll animations - translateX from 0 to -50% for perfect loop */
+@keyframes scroll-seamless-slow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-seamless-medium {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-seamless-fast {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right-seamless {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Updated animation classes with seamless looping */
+.animate-scroll-seamless-slow {
+  animation: scroll-seamless-slow 80s linear infinite;
+}
+
+.animate-scroll-seamless-medium {
+  animation: scroll-seamless-medium 50s linear infinite;
+}
+
+.animate-scroll-seamless-fast {
+  animation: scroll-seamless-fast 30s linear infinite;
+}
+
+.animate-scroll-right-seamless {
+  animation: scroll-right-seamless 70s linear infinite;
+}
+
+.animate-bob {
+  animation: bob 3s ease-in-out infinite;
+}
+
+/* Legacy animation classes (can be removed if not used elsewhere) */
+.animate-scroll-slow {
+  animation: scroll-seamless-slow 60s linear infinite;
+}
+
+.animate-scroll-medium {
+  animation: scroll-seamless-medium 40s linear infinite;
+}
+
+.animate-scroll-fast {
+  animation: scroll-seamless-fast 20s linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right-seamless 50s linear infinite;
+}

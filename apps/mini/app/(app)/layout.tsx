@@ -16,6 +16,8 @@ import "@coinbase/onchainkit/styles.css";
 import "@ethmumb.ai/ui/globals.css";
 import "@silk-hq/components/layered-styles.css";
 
+import { MumbaiBackground } from "./ui/mumbai-animated-background";
+
 export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve({
     title: minikitConfig.frame.name,
@@ -61,14 +63,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <AuthProvider>
                   <ThemeProvider
                     attribute="class"
-                    defaultTheme="system"
-                    enableSystem
+                    defaultTheme="light"
                     disableTransitionOnChange
                     enableColorScheme
                   >
-                    {children}
+                    <div
+                      key="mumbai-bg-container"
+                      className="bg-background fixed inset-0"
+                    >
+                      <MumbaiBackground />
+                    </div>
+                    <div className="relative z-1">{children}</div>
                   </ThemeProvider>
-                  <BottomNav />
+                  {/* <BottomNav /> */}
                 </AuthProvider>
               </ConvexClientProvider>
             </MiniAppProvider>
