@@ -23,7 +23,7 @@ import { Card, CardContent } from "@ethmumb.ai/ui/components/card";
 import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useAuth } from "@/app/_contexts/auth-context";
-import { useAddMiniApp, useMiniApp } from "@/app/_contexts/miniapp-context";
+import { useAddMiniApp, useMiniApp } from "@/shared/context/miniapp-context";
 
 interface SettingsContentProps {
   dismissButton?: React.ReactNode;

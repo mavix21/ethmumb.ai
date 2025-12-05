@@ -12,8 +12,7 @@ import { useAccount, useSignMessage } from "wagmi";
 import type { Session } from "@ethmumb.ai/auth";
 
 import { authClient } from "@/auth/client";
-
-import { useMiniApp } from "./miniapp-context";
+import { useMiniApp } from "@/shared/context/miniapp-context";
 
 interface AuthContextType {
   user: Session["user"] | null;

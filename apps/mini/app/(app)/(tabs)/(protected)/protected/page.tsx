@@ -14,8 +14,8 @@ import {
 import { Separator } from "@ethmumb.ai/ui/components/separator";
 
 import { useAuth } from "@/app/_contexts/auth-context";
-import { useMiniApp } from "@/app/_contexts/miniapp-context";
 import { authClient } from "@/auth/client";
+import { useMiniApp } from "@/shared/context/miniapp-context";
 
 function InfoRow({
   label,
