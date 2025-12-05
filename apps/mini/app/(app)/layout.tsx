@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Sora } from "next/font/google";
+import { Suspense } from "react";
 import { preconnect } from "react-dom";
 
 import { AuthProvider } from "@/app/_contexts/auth-context";
@@ -53,24 +54,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${inter.variable} ${sourceCodePro.variable} font-sans antialiased`}
       >
-        <OnchainKitClientProvider>
-          <MiniAppProvider>
-            <ConvexClientProvider>
-              <AuthProvider>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="system"
-                  enableSystem
-                  disableTransitionOnChange
-                  enableColorScheme
-                >
-                  {children}
-                </ThemeProvider>
-                <BottomNav />
-              </AuthProvider>
-            </ConvexClientProvider>
-          </MiniAppProvider>
-        </OnchainKitClientProvider>
+        <Suspense fallback={null}>
+          <OnchainKitClientProvider>
+            <MiniAppProvider>
+              <ConvexClientProvider>
+                <AuthProvider>
+                  <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                    enableColorScheme
+                  >
+                    {children}
+                  </ThemeProvider>
+                  <BottomNav />
+                </AuthProvider>
+              </ConvexClientProvider>
+            </MiniAppProvider>
+          </OnchainKitClientProvider>
+        </Suspense>
       </body>
     </html>
   );
