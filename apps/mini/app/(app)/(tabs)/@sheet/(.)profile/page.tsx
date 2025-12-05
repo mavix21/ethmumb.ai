@@ -1,13 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { ProfilePageWithSettings } from "@/pages/profile/profile-page-with-settings";
 import { useSheetRoute } from "@/shared/hooks/use-sheet-route";
 
-/**
- * Intercepting route for /profile (soft navigation).
- * Settings is stacked on top using local state.
- */
-export default function ProfileSheetIntercepted() {
+function ProfileSheetContent() {
   const { presented, onPresentedChange, onTravelStatusChange } = useSheetRoute({
     route: "/profile",
   });
@@ -18,5 +16,17 @@ export default function ProfileSheetIntercepted() {
       onPresentedChange={onPresentedChange}
       onTravelStatusChange={onTravelStatusChange}
     />
+  );
+}
+
+/**
+ * Intercepting route for /profile (soft navigation).
+ * Settings is stacked on top using local state.
+ */
+export default function ProfileSheetIntercepted() {
+  return (
+    <Suspense fallback={null}>
+      <ProfileSheetContent />
+    </Suspense>
   );
 }

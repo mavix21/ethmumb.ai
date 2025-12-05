@@ -1,15 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
+
 import { BottomSheet } from "@ethmumb.ai/ui/components/bottom-sheet/index";
 
 import { SettingsContent } from "@/pages/settings/settings-content";
 import { useSheetRoute } from "@/shared/hooks/use-sheet-route";
 
-/**
- * Intercepting route for /settings.
- * Shows settings as a bottom sheet on soft navigation.
- */
-export default function SettingsSheetIntercepted() {
+function SettingsSheetContent() {
   const { presented, onPresentedChange, onTravelStatusChange } = useSheetRoute({
     route: "/settings",
   });
@@ -37,5 +35,17 @@ export default function SettingsSheetIntercepted() {
         </BottomSheet.View>
       </BottomSheet.Portal>
     </BottomSheet.Root>
+  );
+}
+
+/**
+ * Intercepting route for /settings.
+ * Shows settings as a bottom sheet on soft navigation.
+ */
+export default function SettingsSheetIntercepted() {
+  return (
+    <Suspense fallback={null}>
+      <SettingsSheetContent />
+    </Suspense>
   );
 }
