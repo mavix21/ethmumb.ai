@@ -134,4 +134,13 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+
+  --color-best-red: var(--best-red);
+  --color-bus-black: var(--bus-black);
+  --color-brand-white: var(--brand-white);
+  --color-brand-cream: var(--brand-cream);
+  --color-bus-yellow: var(--bus-yellow);
+  --color-bus-green: var(--bus-green);
+  --color-eth-blue: var(--eth-blue);
+  --color-sky-blue: var(--sky-blue);
 }
