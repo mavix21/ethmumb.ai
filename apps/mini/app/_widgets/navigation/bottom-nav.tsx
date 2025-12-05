@@ -2,13 +2,16 @@
 
 import type { LucideIcon } from "lucide-react";
 import type { Route } from "next";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Calendar, Search, Users, Wallet } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
+
+import { triggerHaptics } from "@/lib/farcaster/utils";
+import { useMiniApp } from "@/shared/context/miniapp-context";
 
 import { PrimaryActionButton } from "./primary-action-button";
 
@@ -93,6 +96,12 @@ const NavItem = memo(function NavItem({
   href,
   isActive,
 }: NavItemProps) {
+  const { context, capabilities } = useMiniApp();
+
+  const handleClick = useCallback(() => {
+    triggerHaptics(context, capabilities, "haptics.impactOccurred", "light");
+  }, [context, capabilities]);
+
   return (
     <Button
       variant="ghost"
@@ -105,7 +114,11 @@ const NavItem = memo(function NavItem({
           : "text-muted-foreground hover:text-foreground hover:bg-transparent",
       )}
     >
-      <Link href={href} aria-current={isActive ? "page" : undefined}>
+      <Link
+        href={href}
+        aria-current={isActive ? "page" : undefined}
+        onClick={handleClick}
+      >
         <Icon
           className={cn(
             "size-5 transition-colors",
