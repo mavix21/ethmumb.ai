@@ -241,7 +241,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 space-y-6 overflow-y-auto px-4 py-6">
+      <main className="h-full flex-1 space-y-6 overflow-y-scroll px-4 py-6">
         {/* Error Banner */}
         {error && (
           <Card className="border-destructive/50 bg-destructive/10">
