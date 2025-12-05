@@ -1,4 +1,4 @@
-import { Bus, Landmark, Waves } from "lucide-react";
+import { Bus } from "lucide-react";
 
 export const styleOptions = [
   {
@@ -8,18 +8,18 @@ export const styleOptions = [
     beforeImage: "/examples/classic-before.jpg",
     afterImage: "/examples/classic-after.jpeg",
   },
-  {
-    id: "cyber-link" as const,
-    name: "Cyber-Link",
-    icon: Waves,
-    beforeImage: "/examples/cyber-before.jpg",
-    afterImage: "/examples/cyber-after.jpg",
-  },
-  {
-    id: "heritage" as const,
-    name: "Heritage",
-    icon: Landmark,
-    beforeImage: "/examples/heritage-before.jpg",
-    afterImage: "/examples/heritage-after.jpg",
-  },
+  // {
+  //   id: "cyber-link" as const,
+  //   name: "Cyber-Link",
+  //   icon: Waves,
+  //   beforeImage: "/examples/cyber-before.jpg",
+  //   afterImage: "/examples/cyber-after.jpg",
+  // },
+  // {
+  //   id: "heritage" as const,
+  //   name: "Heritage",
+  //   icon: Landmark,
+  //   beforeImage: "/examples/heritage-before.jpg",
+  //   afterImage: "/examples/heritage-after.jpg",
+  // },
 ];
