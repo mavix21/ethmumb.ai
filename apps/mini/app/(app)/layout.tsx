@@ -52,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${sourceCodePro.variable} h-svh overflow-y-hidden font-sans antialiased`}
+        className={`${inter.variable} ${sourceCodePro.variable} size-full font-sans antialiased`}
       >
         <Suspense fallback={null}>
           <OnchainKitClientProvider>
