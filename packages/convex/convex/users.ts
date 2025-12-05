@@ -31,7 +31,7 @@ export const getOrCreateUserFromFid = action({
     );
 
     if (existingUser) {
-      return { id: existingUser.id, isNew: false };
+      return { id: existingUser._id, isNew: false };
     }
 
     // User doesn't exist, fetch their info from Neynar
@@ -71,7 +71,7 @@ export const getOrCreateUserFromFid = action({
       input: {
         model: "farcaster",
         data: {
-          userId: newUser.id,
+          userId: newUser._id,
           fid: fid,
           username: farcasterUser.username ?? null,
           displayName: farcasterUser.display_name ?? null,
@@ -82,7 +82,7 @@ export const getOrCreateUserFromFid = action({
       },
     });
 
-    return { id: newUser.id, isNew: true };
+    return { id: newUser._id, isNew: true };
   },
 });
 
