@@ -16,7 +16,7 @@ import "@coinbase/onchainkit/styles.css";
 import "@ethmumb.ai/ui/globals.css";
 import "@silk-hq/components/layered-styles.css";
 
-import { MumbaiBackground } from "./ui/mumbai-animated-background";
+import { MumbaiBackground } from "./_ui/mumbai-animated-background";
 
 export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve({
