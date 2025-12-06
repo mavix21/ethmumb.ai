@@ -1,4 +1,3 @@
-import * as React from "react";
 import Image from "next/image";
 import {
   ArrowLeft,
@@ -17,50 +16,19 @@ import {
 } from "@ethmumb.ai/ui/components/dropdown-menu";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
+import { useMiniApp } from "@/shared/context/miniapp-context";
+
 import { useAvatar } from "../model/avatar-context";
 import { styleOptions } from "../model/style-options";
-
-const MAX_IMAGE_DIMENSION = 400;
+import { useImageDimensions } from "../model/use-image-dimensions";
 
 export function ConfirmationView() {
   const { send, selectedStyle, currentStyle, uploadedImage, isPaying } =
     useAvatar();
-  const [imageDimensions, setImageDimensions] = React.useState<{
-    width: number;
-    height: number;
-  } | null>(null);
+  const { context } = useMiniApp();
+  const imageDimensions = useImageDimensions(uploadedImage);
 
   const CurrentIcon = currentStyle.icon;
-
-  // Calculate image dimensions preserving aspect ratio
-  React.useEffect(() => {
-    if (!uploadedImage) return;
-
-    const img = new window.Image();
-    img.onload = () => {
-      const { naturalWidth, naturalHeight } = img;
-      const aspectRatio = naturalWidth / naturalHeight;
-
-      let width: number;
-      let height: number;
-
-      if (naturalWidth > naturalHeight) {
-        // Landscape
-        width = Math.min(naturalWidth, MAX_IMAGE_DIMENSION);
-        height = width / aspectRatio;
-      } else {
-        // Portrait or square
-        height = Math.min(naturalHeight, MAX_IMAGE_DIMENSION);
-        width = height * aspectRatio;
-      }
-
-      setImageDimensions({
-        width: Math.round(width),
-        height: Math.round(height),
-      });
-    };
-    img.src = uploadedImage;
-  }, [uploadedImage]);
 
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-y-auto p-4 md:p-8">
@@ -74,7 +42,7 @@ export function ConfirmationView() {
         <span>Back</span>
       </button>
 
-      <div className="z-10 flex w-full max-w-md flex-col items-center gap-6">
+      <div className="z-10 flex w-full max-w-md flex-col items-center gap-8">
         {/* Header */}
         <div className="text-center">
           <h2 className="font-display text-foreground mb-2 text-2xl font-bold md:text-3xl">
@@ -102,11 +70,7 @@ export function ConfirmationView() {
                 alt="Your photo"
                 width={imageDimensions.width}
                 height={imageDimensions.height}
-                className="block"
-                style={{
-                  width: imageDimensions.width,
-                  height: imageDimensions.height,
-                }}
+                className="block h-auto max-h-88 w-auto"
                 priority
               />
             </div>
@@ -153,12 +117,14 @@ export function ConfirmationView() {
         )}
 
         {/* BEST Bus Ticket Style Price */}
-        <BestBusTicketPrice />
+        {/* <BestBusTicketPrice /> */}
 
         {/* Action buttons */}
         <div className="flex w-full flex-col gap-3">
           <Button
-            onClick={() => send({ type: "CONFIRM_PAY" })}
+            onClick={() =>
+              send({ type: "CONFIRM_PAY", fid: context?.user.fid })
+            }
             disabled={isPaying}
             size="lg"
             className="w-full font-medium"
