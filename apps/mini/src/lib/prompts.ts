@@ -7,10 +7,10 @@ CRITICAL RULES:
 - Subject(s) must fill the frame edge-to-edge, no empty space at top
 
 BACKGROUND:
-- Use BRIGHT, VIVID scarlet red (RGB 226, 35, 26) - NOT dark, NOT maroon, NOT brownish
-- Cover ENTIRE background densely with Mumbai silhouettes - NO blank red areas
-- Fill every gap with: Gateway of India, CST dome, BEST double-decker buses, auto-rickshaws, dabbawalas, chai glasses, vada pav, local trains, film reels
-- Silhouettes in lighter coral/salmon shade, overlapping and layered throughout
+- Solid BEST bus red background (#E2231A) filling the entire canvas
+- Overlay subtle Mumbai landmark silhouettes in a slightly darker or lighter red shade (like watermarks)
+- Include iconic Mumbai elements scattered throughout: Gateway of India, CST station dome, Marine Drive skyline, BEST double-decker bus, auto-rickshaws, local trains, dabbawalas, cutting chai glasses, vada pav stalls, Bollywood film reels
+- These background elements should be subtle line drawings, not overpowering the main subject
 
 SUBJECT:
 - Clean cartoon/anime style, maintain accurate likeness of ALL people
