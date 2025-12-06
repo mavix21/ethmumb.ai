@@ -106,6 +106,8 @@ interface AnalyzeImageOutput {
   score: number;
 }
 
+const ANALYSIS_MIN_DELAY_MS = 1500;
+
 const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
   async ({ input }) => {
     const model = input.model;
@@ -114,28 +116,37 @@ const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
       throw new Error("NSFW model not available");
     }
 
-    const img = await fileToImage(input.file);
-    const predictions = await model.classify(img);
+    // Run analysis and minimum delay in parallel
+    // Promise.all ensures we wait for both to complete
+    const [result] = await Promise.all([
+      (async () => {
+        const img = await fileToImage(input.file);
+        const predictions = await model.classify(img);
 
-    // Find highest inappropriate score
-    let maxScore = 0;
-    for (const prediction of predictions) {
-      if (
-        NSFW_CATEGORIES.includes(
-          prediction.className as (typeof NSFW_CATEGORIES)[number],
-        )
-      ) {
-        maxScore = Math.max(maxScore, prediction.probability);
-      }
-    }
+        // Find highest inappropriate score
+        let maxScore = 0;
+        for (const prediction of predictions) {
+          if (
+            NSFW_CATEGORIES.includes(
+              prediction.className as (typeof NSFW_CATEGORIES)[number],
+            )
+          ) {
+            maxScore = Math.max(maxScore, prediction.probability);
+          }
+        }
 
-    // Clean up
-    URL.revokeObjectURL(img.src);
+        // Clean up
+        URL.revokeObjectURL(img.src);
 
-    return {
-      isNsfw: maxScore >= NSFW_THRESHOLD,
-      score: maxScore,
-    };
+        return {
+          isNsfw: maxScore >= NSFW_THRESHOLD,
+          score: maxScore,
+        };
+      })(),
+      new Promise((resolve) => setTimeout(resolve, ANALYSIS_MIN_DELAY_MS)),
+    ]);
+
+    return result;
   },
 );
 
