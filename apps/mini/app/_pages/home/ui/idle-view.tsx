@@ -111,11 +111,7 @@ export function IdleView() {
         })}
       </div>
 
-      <Button
-        size="lg"
-        onClick={handleUploadClick}
-        className="w-full max-w-xs md:w-auto"
-      >
+      <Button size="lg" onClick={handleUploadClick} className="w-full max-w-md">
         <Sparkles className="h-5 w-5" />
         <span>Upload Image</span>
       </Button>
