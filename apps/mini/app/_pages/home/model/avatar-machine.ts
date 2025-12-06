@@ -1,4 +1,5 @@
 import type * as nsfwjs from "nsfwjs";
+import imageCompression from "browser-image-compression";
 import { assign, fromPromise, setup } from "xstate";
 
 // ============================================================================
@@ -15,6 +16,18 @@ export type StyleId = (typeof STYLES)[keyof typeof STYLES];
 
 const NSFW_THRESHOLD = 0.7;
 const NSFW_CATEGORIES = ["Porn", "Hentai"] as const;
+
+// Compression settings optimized for AI image generation
+// Priority: preserve maximum detail for LLM to analyze facial features, lighting, textures
+// Secondary: reduce file size for network transport
+const COMPRESSION_OPTIONS: Parameters<typeof imageCompression>[1] = {
+  maxSizeMB: 2, // Allow up to 2MB to preserve quality
+  maxWidthOrHeight: 1536, // Balance: enough detail for AI, reasonable for low-end devices
+  useWebWorker: true, // Offload to web worker (critical for low-end devices)
+  preserveExif: false, // Strip metadata for privacy + smaller size
+  initialQuality: 0.9, // High quality - AI needs detail for accurate generation
+  alwaysKeepResolution: true, // Don't downscale small images
+};
 
 // ============================================================================
 // Error Types
@@ -104,6 +117,8 @@ interface AnalyzeImageInput {
 interface AnalyzeImageOutput {
   isNsfw: boolean;
   score: number;
+  compressedFile: File;
+  compressedDataUrl: string;
 }
 
 const ANALYSIS_MIN_DELAY_MS = 1500;
@@ -116,11 +131,22 @@ const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
       throw new Error("NSFW model not available");
     }
 
-    // Run analysis and minimum delay in parallel
-    // Promise.all ensures we wait for both to complete
+    // Run compression, analysis, and minimum delay in parallel
+    // Compression happens first, then NSFW analysis uses the compressed image
     const [result] = await Promise.all([
       (async () => {
-        const img = await fileToImage(input.file);
+        // Step 1: Compress the image with Squoosh-like quality settings
+        const compressedFile = await imageCompression(
+          input.file,
+          COMPRESSION_OPTIONS,
+        );
+
+        // Step 2: Convert compressed file to data URL for API transport
+        const compressedDataUrl =
+          await imageCompression.getDataUrlFromFile(compressedFile);
+
+        // Step 3: Analyze the compressed image for NSFW content
+        const img = await fileToImage(compressedFile);
         const predictions = await model.classify(img);
 
         // Find highest inappropriate score
@@ -141,6 +167,8 @@ const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
         return {
           isNsfw: maxScore >= NSFW_THRESHOLD,
           score: maxScore,
+          compressedFile,
+          compressedDataUrl,
         };
       })(),
       new Promise((resolve) => setTimeout(resolve, ANALYSIS_MIN_DELAY_MS)),
@@ -311,6 +339,9 @@ export const avatarMachine = setup({
             target: "user_confirming",
             actions: assign({
               nsfwScore: ({ event }) => event.output.score,
+              // Update with compressed image data for API transport
+              uploadedImage: ({ event }) => event.output.compressedDataUrl,
+              uploadedFile: ({ event }) => event.output.compressedFile,
             }),
           },
         ],
