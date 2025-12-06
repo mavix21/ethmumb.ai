@@ -56,6 +56,7 @@ const createError = (
 // ============================================================================
 
 export interface AvatarContext {
+  fid: number | null;
   selectedStyle: StyleId;
   uploadedImage: string | null;
   uploadedFile: File | null;
@@ -69,7 +70,7 @@ export interface AvatarContext {
 export type AvatarEvent =
   | { type: "SELECT_STYLE"; style: StyleId }
   | { type: "FILE_SELECTED"; image: string; file: File }
-  | { type: "CONFIRM_PAY" }
+  | { type: "CONFIRM_PAY"; fid?: number }
   | { type: "CANCEL" }
   | { type: "RESET" }
   | { type: "RETRY" }
@@ -181,6 +182,7 @@ const analyzeImageActor = fromPromise<AnalyzeImageOutput, AnalyzeImageInput>(
 interface ServiceInput {
   image: string;
   style: StyleId;
+  fid?: number;
 }
 
 // Mock payment service
@@ -190,21 +192,36 @@ const mockPaymentService = fromPromise<void, ServiceInput>(async () => {
   return;
 });
 
-const mockProcessingService = fromPromise<string, ServiceInput>(
-  async ({ input }) => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+// Response schema for the generate-avatar API
+interface GenerateAvatarResponse {
+  imageUrl: string;
+  success: true;
+}
 
-    // 5% random server-side rejection
-    if (Math.random() < 0.05) {
-      throw new Error("Server-side content policy violation detected");
+interface GenerateAvatarErrorResponse {
+  error: string;
+  details?: string[];
+}
+
+const generateAvatarService = fromPromise<string, ServiceInput>(
+  async ({ input }) => {
+    const response = await fetch("/api/generate-avatar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: input.image,
+        style: input.style,
+        fid: input.fid,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = (await response.json()) as GenerateAvatarErrorResponse;
+      throw new Error(errorData.error || "Failed to generate avatar");
     }
 
-    const styleImages: Record<StyleId, string> = {
-      [STYLES.CLASSIC_BEST]: "/examples/classic-after.png",
-      [STYLES.CYBER_LINK]: "/examples/cyber-after.jpg",
-      [STYLES.HERITAGE]: "/examples/heritage-after.jpg",
-    };
-    return styleImages[input.style];
+    const data = (await response.json()) as GenerateAvatarResponse;
+    return data.imageUrl;
   },
 );
 
@@ -221,7 +238,7 @@ export const avatarMachine = setup({
     loadModel: loadModelActor,
     analyzeImage: analyzeImageActor,
     paymentService: mockPaymentService,
-    processingService: mockProcessingService,
+    processingService: generateAvatarService,
   },
   guards: {
     hasUploadedFile: ({ context }) => context.uploadedFile !== null,
@@ -257,17 +274,25 @@ export const avatarMachine = setup({
       error: () => null,
     }),
     resetContext: assign({
+      fid: () => null,
       uploadedImage: () => null,
       uploadedFile: () => null,
       generatedImage: () => null,
       error: () => null,
       nsfwScore: () => null,
     }),
+    setFid: assign({
+      fid: ({ event }) => {
+        if (event.type === "CONFIRM_PAY") return event.fid ?? null;
+        return null;
+      },
+    }),
   },
 }).createMachine({
   id: "avatarMachine",
   initial: "idle",
   context: {
+    fid: null,
     selectedStyle: STYLES.CLASSIC_BEST,
     uploadedImage: null,
     uploadedFile: null,
@@ -373,6 +398,7 @@ export const avatarMachine = setup({
         CONFIRM_PAY: {
           target: "paying",
           guard: "hasUploadedImage",
+          actions: "setFid",
         },
         CANCEL: {
           target: "idle",
@@ -422,6 +448,7 @@ export const avatarMachine = setup({
           return {
             image: context.uploadedImage,
             style: context.selectedStyle,
+            fid: context.fid ?? undefined,
           };
         },
         onDone: {
