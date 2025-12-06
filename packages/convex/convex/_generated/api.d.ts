@@ -9,8 +9,11 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as generations from "../generations.js";
 import type * as http from "../http.js";
 import type * as lib_neynar from "../lib/neynar.js";
+import type * as storage from "../storage.js";
+import type * as tables_generations from "../tables/generations.js";
 import type * as users from "../users.js";
 
 import type {
@@ -21,8 +24,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  generations: typeof generations;
   http: typeof http;
   "lib/neynar": typeof lib_neynar;
+  storage: typeof storage;
+  "tables/generations": typeof tables_generations;
   users: typeof users;
 }>;
 
