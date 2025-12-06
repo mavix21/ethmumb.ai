@@ -6,6 +6,8 @@ import { useMachine } from "@xstate/react";
 
 import type { AvatarError, AvatarEvent, StyleId } from "./avatar-machine";
 import { avatarMachine } from "./avatar-machine";
+import type { StyleOption } from "./style-options";
+import { getStyleById } from "./style-options";
 
 interface AvatarContextValue {
   state: ReturnType<typeof useMachine<typeof avatarMachine>>[0];
@@ -21,6 +23,7 @@ interface AvatarContextValue {
   isServerError: boolean;
   isSuccess: boolean;
   selectedStyle: StyleId;
+  currentStyle: StyleOption;
   uploadedImage: string | null;
   generatedImage: string | null;
   error: AvatarError | null;
@@ -45,6 +48,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     isServerError: state.matches("error"),
     isSuccess: state.matches("success"),
     selectedStyle: state.context.selectedStyle,
+    currentStyle: getStyleById(state.context.selectedStyle),
     uploadedImage: state.context.uploadedImage,
     generatedImage: state.context.generatedImage,
     error: state.context.error,

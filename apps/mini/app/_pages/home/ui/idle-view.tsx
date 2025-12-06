@@ -10,12 +10,8 @@ import { useAvatar } from "../model/avatar-context";
 import { styleOptions } from "../model/style-options";
 
 export function IdleView() {
-  const { send, selectedStyle } = useAvatar();
+  const { send, selectedStyle, currentStyle } = useAvatar();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-
-  const currentStyle =
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    styleOptions.find((s) => s.id === selectedStyle) ?? styleOptions[0]!;
 
   const handleFileSelect = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

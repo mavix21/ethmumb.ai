@@ -1,7 +1,13 @@
 "use client";
 
 import { useAvatar } from "./model/avatar-context";
+import { AnalyzingView } from "./ui/analyzing-view";
+import { ConfirmationView } from "./ui/confirmation-view";
+import { ErrorView } from "./ui/error-view";
 import { IdleView } from "./ui/idle-view";
+import { NsfwViolationView } from "./ui/nsfw-violation-view";
+import { ProcessingView } from "./ui/processing-view";
+import { SuccessView } from "./ui/success-view";
 
 export function HomePage() {
   const {
@@ -15,5 +21,15 @@ export function HomePage() {
     isSuccess,
   } = useAvatar();
 
-  return <>{isIdle && <IdleView />}</>;
+  return (
+    <>
+      {isIdle && <IdleView />}
+      {isAnalyzing && <AnalyzingView />}
+      {isNsfwViolation && <NsfwViolationView />}
+      {(isUserConfirming || isPaying) && <ConfirmationView />}
+      {isProcessing && <ProcessingView />}
+      {isServerError && <ErrorView />}
+      {isSuccess && <SuccessView />}
+    </>
+  );
 }
