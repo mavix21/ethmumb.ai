@@ -31,6 +31,7 @@
     "ai": "5.0.106",
     "better-auth": "catalog:",
     "better-auth-siwf": "^1.0.20",
+    "browser-image-compression": "^2.0.2",
     "convex": "^1.30.0",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
     "ky": "^1.14.0",
