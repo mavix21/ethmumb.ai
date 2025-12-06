@@ -16,13 +16,13 @@
   --radius: 0.625rem;
   --background: var(--best-red);
   --foreground: var(--brand-white);
-  --card: var(--best-red);
+  --card: var(--brand-white);
   --card-foreground: var(--bus-black);
   --popover: var(--brand-white);
   --popover-foreground: var(--bus-black);
   --primary: var(--brand-white);
   --primary-foreground: var(--bus-black);
-  --secondary: rgba(255, 255, 255, 0.15);
+  --secondary: var(--eth-blue);
   --secondary-foreground: var(--brand-white);
   --muted: rgba(255, 255, 255, 0.2);
   --muted-foreground: rgba(255, 255, 255, 0.7);
