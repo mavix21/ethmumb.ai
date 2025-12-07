@@ -1,5 +1,7 @@
 "use client";
 
+import { Activity } from "react";
+
 import { useAvatar } from "./model/avatar-context";
 import { AnalyzingView } from "./ui/analyzing-view";
 import { ConfirmationView } from "./ui/confirmation-view";
@@ -23,7 +25,9 @@ export function HomePage() {
 
   return (
     <>
-      {isIdle && <IdleView />}
+      <Activity mode={isIdle ? "visible" : "hidden"}>
+        <IdleView />
+      </Activity>
       {isAnalyzing && <AnalyzingView />}
       {isNsfwViolation && <NsfwViolationView />}
       {(isUserConfirming || isPaying) && <ConfirmationView />}
