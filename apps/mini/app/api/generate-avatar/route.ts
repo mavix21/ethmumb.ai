@@ -141,7 +141,7 @@ export async function POST(req: Request): Promise<Response> {
   let result;
   try {
     result = await generateText({
-      model: google("gemini-2.5-flash-image"),
+      model: google("gemini-3-pro-image-preview"),
       providerOptions: {
         google: {
           responseModalities: ["TEXT", "IMAGE"],
