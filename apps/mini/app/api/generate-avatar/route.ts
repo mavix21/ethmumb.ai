@@ -263,6 +263,7 @@ async function storeGeneratedAvatar(
 ): Promise<void> {
   // Get a temporary upload URL from Convex
   const uploadUrl = await fetchMutation(api.storage.generateUploadUrl);
+  console.warn("Obtained upload URL from Convex storage", { uploadUrl });
 
   // Convert base64 to a Blob for upload
   const blob = base64ToBlob(generatedFile.base64, generatedFile.mediaType);
@@ -275,6 +276,7 @@ async function storeGeneratedAvatar(
     },
     body: blob,
   });
+  console.warn("Uploaded image to Convex storage", { uploadResponse });
 
   if (!uploadResponse.ok) {
     throw new Error(
@@ -295,9 +297,10 @@ async function storeGeneratedAvatar(
   }
 
   // Store the generation record in the database
-  await fetchMutation(api.generations.storeGeneration, {
+  const genId = await fetchMutation(api.generations.storeGeneration, {
     fid,
     imageStorageId: parsedResult.data.storageId as Id<"_storage">,
     style,
   });
+  console.warn("Stored generation record in database", { genId });
 }
