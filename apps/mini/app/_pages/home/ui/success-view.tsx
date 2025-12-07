@@ -4,7 +4,7 @@ import { Download, Plus, Share2 } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 
-import { ROOT_URL } from "@/lib/constants";
+import { env } from "@/env";
 
 import { useAvatar } from "../model/avatar-context";
 import { useImageDimensions } from "../model/use-image-dimensions";
@@ -25,8 +25,8 @@ export function SuccessView() {
 
   const handleShare = async () => {
     const shareUrl = generationId
-      ? `${ROOT_URL}/generation/${generationId}`
-      : ROOT_URL;
+      ? `${env.SITE_URL}/generation/${generationId}`
+      : env.SITE_URL;
     await composeCastAsync({
       text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
       embeds: [shareUrl],
