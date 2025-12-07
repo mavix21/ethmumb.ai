@@ -1,7 +1,10 @@
+import * as React from "react";
 import { ConnectWallet, Wallet } from "@coinbase/onchainkit/wallet";
 import {
   ArrowLeft,
   ChevronDown,
+  ImageOff,
+  Loader2,
   Sparkles,
   Wallet as WalletIcon,
 } from "lucide-react";
@@ -20,6 +23,82 @@ import { useMiniApp } from "@/shared/context/miniapp-context";
 import { useAvatar } from "../model/avatar-context";
 import { styleOptions } from "../model/style-options";
 
+/**
+ * Robust image component that handles data URL loading with proper error states
+ */
+function PreviewImage({ src, alt }: { src: string; alt: string }) {
+  const [status, setStatus] = React.useState<"loading" | "loaded" | "error">(
+    "loading",
+  );
+  // Use a hash of the src to detect changes (length is a quick proxy)
+  const srcKey = React.useMemo(
+    () => `img-${src.length}-${src.slice(-20)}`,
+    [src],
+  );
+
+  // Reset status when src changes
+  React.useEffect(() => {
+    console.log("[PreviewImage] src changed, resetting status", {
+      length: src.length,
+      prefix: src.substring(0, 50),
+    });
+    setStatus("loading");
+
+    // Timeout fallback: if image hasn't loaded in 5 seconds, show error
+    const timeout = setTimeout(() => {
+      setStatus((current) => {
+        if (current === "loading") {
+          console.error("[PreviewImage] Image load timeout after 5s");
+          return "error";
+        }
+        return current;
+      });
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [src]);
+
+  return (
+    <div className="relative min-h-[200px] min-w-[200px]">
+      {status === "loading" && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+        </div>
+      )}
+      {status === "error" && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gray-100 p-4">
+          <ImageOff className="h-8 w-8 text-gray-400" />
+          <p className="text-center text-sm text-gray-500">
+            Failed to load image
+          </p>
+        </div>
+      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={srcKey}
+        src={src}
+        alt={alt}
+        className={cn(
+          "block max-h-[360px] max-w-[360px] object-contain",
+          status !== "loaded" && "invisible",
+        )}
+        onLoad={() => {
+          console.log("[PreviewImage] Image loaded successfully");
+          setStatus("loaded");
+        }}
+        onError={(e) => {
+          console.error("[PreviewImage] Image failed to load:", {
+            srcLength: src.length,
+            srcPrefix: src.substring(0, 100),
+            error: e,
+          });
+          setStatus("error");
+        }}
+      />
+    </div>
+  );
+}
+
 export function ConfirmationView() {
   const {
     send,
@@ -32,6 +111,16 @@ export function ConfirmationView() {
   const { context } = useMiniApp();
 
   const CurrentIcon = currentStyle.icon;
+
+  // Debug logging
+  React.useEffect(() => {
+    console.log("[ConfirmationView] uploadedImage state:", {
+      exists: !!uploadedImage,
+      length: uploadedImage?.length ?? 0,
+      prefix: uploadedImage?.substring(0, 100) ?? "null",
+      isDataUrl: uploadedImage?.startsWith("data:") ?? false,
+    });
+  }, [uploadedImage]);
 
   return (
     <main className="relative flex flex-1 flex-col items-center justify-center overflow-y-auto p-4 md:p-8">
@@ -67,12 +156,7 @@ export function ConfirmationView() {
 
             {/* Image container */}
             <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={uploadedImage}
-                alt="Your photo"
-                className="block max-h-[360px] max-w-[360px] object-contain"
-              />
+              <PreviewImage src={uploadedImage} alt="Your photo" />
             </div>
 
             {/* Style badge with dropdown */}
