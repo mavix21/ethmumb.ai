@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { useQuery } from "convex/react";
-import { ImageIcon, LogIn } from "lucide-react";
+import { ExternalLink, ImageIcon, LogIn, Share2 } from "lucide-react";
 
+import type { Doc } from "@ethmumb.ai/convex/_generated/dataModel";
 import { api } from "@ethmumb.ai/convex/_generated/api";
 import {
   Avatar,
@@ -12,6 +15,8 @@ import {
   AvatarImage,
 } from "@ethmumb.ai/ui/components/avatar";
 import { Badge } from "@ethmumb.ai/ui/components/badge";
+import { Button } from "@ethmumb.ai/ui/components/button";
+import { Card } from "@ethmumb.ai/ui/components/card-sheet/card-sheet";
 import {
   Empty,
   EmptyContent,
@@ -28,6 +33,7 @@ import { Separator } from "@ethmumb.ai/ui/components/separator";
 import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { useAuth } from "@/app/_contexts/auth-context";
+import { env } from "@/env";
 import { useMiniApp } from "@/shared/context/miniapp-context";
 
 function GallerySkeleton() {
@@ -63,26 +69,87 @@ function GallerySkeleton() {
 }
 
 interface GenerationCardProps {
-  imageUrl: string | null;
-  style: string;
+  generation: Doc<"generations"> & { imageUrl: string | null };
 }
 
-function GenerationCard({ imageUrl, style }: GenerationCardProps) {
+function GenerationCard({ generation }: GenerationCardProps) {
+  const [open, setOpen] = useState(false);
+  const { composeCast } = useComposeCast();
+
+  const handleShare = () => {
+    const shareUrl = `${env.SITE_URL}/generation/${generation._id}`;
+    composeCast({
+      text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
+      embeds: [shareUrl],
+    });
+  };
+
   return (
-    <div className="group relative aspect-square overflow-hidden rounded-lg">
-      {imageUrl ? (
-        <Image
-          src={imageUrl}
-          alt={`${style} generation`}
-          fill
-          className="object-cover"
-        />
-      ) : (
-        <div className="bg-muted flex size-full items-center justify-center">
-          <ImageIcon className="text-muted-foreground size-8" />
-        </div>
-      )}
-    </div>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="group focus-visible:ring-ring relative aspect-square overflow-hidden rounded-lg focus:outline-none focus-visible:ring-2"
+      >
+        {generation.imageUrl ? (
+          <Image
+            src={generation.imageUrl}
+            alt={`${generation.style} generation`}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+          />
+        ) : (
+          <div className="bg-muted flex size-full items-center justify-center">
+            <ImageIcon className="text-muted-foreground size-8" />
+          </div>
+        )}
+      </button>
+
+      <Card.Root presented={open} onPresentedChange={setOpen}>
+        <Card.Portal>
+          <Card.View>
+            <Card.Backdrop />
+            <Card.Content className="bg-background mx-4 max-w-sm overflow-hidden rounded-2xl">
+              {/* Image */}
+              {generation.imageUrl && (
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={generation.imageUrl}
+                    alt={`${generation.style} generation`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex flex-col gap-3 p-4">
+                <div className="flex items-center justify-between">
+                  <Badge variant="secondary">{generation.style}</Badge>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleShare}
+                    variant="secondary"
+                    className="flex-1"
+                  >
+                    <Share2 className="mr-2 size-4" />
+                    Share
+                  </Button>
+                  <Button asChild className="flex-1">
+                    <Link href={`/generation/${generation._id}` as "/"}>
+                      <ExternalLink className="mr-2 size-4" />
+                      View
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </Card.Content>
+          </Card.View>
+        </Card.Portal>
+      </Card.Root>
+    </>
   );
 }
 
@@ -123,11 +190,7 @@ function AuthenticatedGallery({ fid }: { fid: number }) {
       <h3 className="text-foreground font-medium">All Generations</h3>
       <div className="grid grid-cols-2 gap-3">
         {generations.map((generation) => (
-          <GenerationCard
-            key={generation._id}
-            imageUrl={generation.imageUrl}
-            style={generation.style}
-          />
+          <GenerationCard key={generation._id} generation={generation} />
         ))}
       </div>
     </div>
