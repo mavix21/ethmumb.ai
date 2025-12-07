@@ -1,5 +1,11 @@
 import Image from "next/image";
-import { ArrowLeft, ChevronDown, Sparkles } from "lucide-react";
+import { ConnectWallet, Wallet } from "@coinbase/onchainkit/wallet";
+import {
+  ArrowLeft,
+  ChevronDown,
+  Sparkles,
+  Wallet as WalletIcon,
+} from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 import {
@@ -127,28 +133,35 @@ export function ConfirmationView() {
 
         {/* Action buttons */}
         <div className="flex w-full flex-col gap-3">
-          <Button
-            onClick={() =>
-              send({ type: "CONFIRM_PAY", fid: context?.user.fid })
-            }
-            disabled={!isWalletConnected || isGenerating}
-            size="lg"
-            className="w-full font-medium"
-          >
-            {!isWalletConnected ? (
-              <>Connect Wallet to Generate</>
-            ) : isGenerating ? (
-              <>
-                <Sparkles className="h-5 w-5 animate-pulse" />
-                Confirm in Wallet...
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-5 w-5" />
-                Pay 0.2 USDC and Generate My Avatar
-              </>
-            )}
-          </Button>
+          {!isWalletConnected ? (
+            <Wallet className="w-full">
+              <ConnectWallet className="w-full">
+                <WalletIcon className="mr-2 h-5 w-5" />
+                <span>Connect Wallet to Generate</span>
+              </ConnectWallet>
+            </Wallet>
+          ) : (
+            <Button
+              onClick={() =>
+                send({ type: "CONFIRM_PAY", fid: context?.user.fid })
+              }
+              disabled={isGenerating}
+              size="lg"
+              className="w-full font-medium"
+            >
+              {isGenerating ? (
+                <>
+                  <Sparkles className="h-5 w-5 animate-pulse" />
+                  Confirm in Wallet...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-5 w-5" />
+                  Pay 0.2 USDC and Generate My Avatar
+                </>
+              )}
+            </Button>
+          )}
 
           <Button
             variant="ghost"
