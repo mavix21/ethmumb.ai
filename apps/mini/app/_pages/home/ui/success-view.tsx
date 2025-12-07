@@ -1,19 +1,14 @@
-import Image from "next/image";
 import { sdk as miniappSdk } from "@farcaster/miniapp-sdk";
 import { Download, Plus, Share2 } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
-import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 
 import { env } from "@/env";
 
 import { useAvatar } from "../model/avatar-context";
-import { useImageDimensions } from "../model/use-image-dimensions";
 
 export function SuccessView() {
   const { send, currentStyle, generatedImage, generationId } = useAvatar();
-  const { dimensions: imageDimensions, isLoading: isDimensionsLoading } =
-    useImageDimensions(generatedImage);
 
   const handleDownload = () => {
     if (generatedImage) {
@@ -54,27 +49,20 @@ export function SuccessView() {
           </p>
         </div>
 
-        {/* Generated image with natural dimensions */}
+        {/* Generated image - using native img for reliable data URL rendering */}
         {generatedImage && (
           <div className="relative">
             {/* Glow effect */}
             <div className="bg-brand-cream/30 absolute inset-0 -z-10 blur-3xl" />
 
-            {/* Image container with loading state */}
+            {/* Image container */}
             <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              {isDimensionsLoading || !imageDimensions ? (
-                <Skeleton className="h-[300px] w-[300px]" />
-              ) : (
-                <Image
-                  src={generatedImage}
-                  alt="Your ETHMumbai avatar"
-                  width={imageDimensions.width}
-                  height={imageDimensions.height}
-                  className="block max-h-88 w-auto"
-                  priority
-                  unoptimized
-                />
-              )}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={generatedImage}
+                alt="Your ETHMumbai avatar"
+                className="block max-h-[360px] max-w-[360px] object-contain"
+              />
             </div>
           </div>
         )}

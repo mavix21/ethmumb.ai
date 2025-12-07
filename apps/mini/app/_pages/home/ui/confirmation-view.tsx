@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ConnectWallet, Wallet } from "@coinbase/onchainkit/wallet";
 import {
   ArrowLeft,
@@ -14,14 +13,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ethmumb.ai/ui/components/dropdown-menu";
-import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { useMiniApp } from "@/shared/context/miniapp-context";
 
 import { useAvatar } from "../model/avatar-context";
 import { styleOptions } from "../model/style-options";
-import { useImageDimensions } from "../model/use-image-dimensions";
 
 export function ConfirmationView() {
   const {
@@ -33,8 +30,6 @@ export function ConfirmationView() {
     isGenerating,
   } = useAvatar();
   const { context } = useMiniApp();
-  const { dimensions: imageDimensions, isLoading: isDimensionsLoading } =
-    useImageDimensions(uploadedImage);
 
   const CurrentIcon = currentStyle.icon;
 
@@ -64,27 +59,20 @@ export function ConfirmationView() {
           </p>
         </div>
 
-        {/* Image preview with natural aspect ratio */}
+        {/* Image preview - using native img for reliable data URL rendering */}
         {uploadedImage && (
           <div className="relative">
             {/* Glow effect */}
             <div className="bg-brand-cream/20 absolute inset-0 -z-10 blur-3xl" />
 
-            {/* Image container with loading state */}
+            {/* Image container */}
             <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              {isDimensionsLoading || !imageDimensions ? (
-                <Skeleton className="h-[300px] w-[300px]" />
-              ) : (
-                <Image
-                  src={uploadedImage}
-                  alt="Your photo"
-                  width={imageDimensions.width}
-                  height={imageDimensions.height}
-                  className="block h-auto max-h-88 w-auto"
-                  priority
-                  unoptimized
-                />
-              )}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={uploadedImage}
+                alt="Your photo"
+                className="block max-h-[360px] max-w-[360px] object-contain"
+              />
             </div>
 
             {/* Style badge with dropdown */}
