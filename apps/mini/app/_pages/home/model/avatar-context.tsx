@@ -2,8 +2,11 @@
 
 import type { ReactNode } from "react";
 import * as React from "react";
+import { createConfig, http } from "@wagmi/core";
+import { base } from "@wagmi/core/chains";
 import { useMachine } from "@xstate/react";
-import { useAccount, useConfig } from "wagmi";
+import { createClient } from "viem";
+import { useAccount } from "wagmi";
 import { getWalletClient } from "wagmi/actions";
 import { wrapFetchWithPayment } from "x402-fetch";
 
@@ -44,8 +47,15 @@ const AvatarContext = React.createContext<AvatarContextValue | null>(null);
 // Max payment amount: $0.25 USDC (endpoint costs $0.20)
 const MAX_PAYMENT_USDC = BigInt(0.25 * 10 ** 6);
 
+// Create wagmi config for x402 - matching x402 mini-app template approach
+const x402Config = createConfig({
+  chains: [base],
+  client({ chain }) {
+    return createClient({ chain, transport: http() });
+  },
+});
+
 export function AvatarProvider({ children }: { children: ReactNode }) {
-  const config = useConfig();
   const { address, chainId, connector, isConnected } = useAccount();
   const [fetchWithPayment, setFetchWithPayment] =
     React.useState<FetchWithPayment | null>(null);
@@ -60,7 +70,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
       }
 
       try {
-        const walletClient = await getWalletClient(config, {
+        const walletClient = await getWalletClient(x402Config, {
           account: address,
           chainId: chainId,
           connector: connector,
@@ -73,7 +83,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
 
         const wrappedFetch = wrapFetchWithPayment(
           fetch,
-          walletClient as Parameters<typeof wrapFetchWithPayment>[1],
+          walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
           MAX_PAYMENT_USDC,
         );
         setFetchWithPayment(() => wrappedFetch);
@@ -84,7 +94,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     }
 
     void setupPaymentFetch();
-  }, [config, address, chainId, connector, isConnected]);
+  }, [address, chainId, connector, isConnected]);
 
   const [state, send] = useMachine(avatarMachine, {
     input: {
