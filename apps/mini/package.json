@@ -17,6 +17,7 @@
   "dependencies": {
     "@ai-sdk/google": "^2.0.44",
     "@coinbase/onchainkit": "latest",
+    "@coinbase/x402": "latest",
     "@convex-dev/better-auth": "^0.9.11",
     "@ethmumb.ai/auth": "workspace:*",
     "@ethmumb.ai/convex": "workspace:*",
@@ -49,6 +50,8 @@
     "uuid": "^13.0.0",
     "viem": "^2.40.3",
     "wagmi": "^2.19.5",
+    "x402-fetch": "latest",
+    "x402-next": "latest",
     "xstate": "5.24.0",
     "zod": "catalog:"
   },
