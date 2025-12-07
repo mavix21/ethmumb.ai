@@ -29,6 +29,7 @@
     "@t3-oss/env-nextjs": "^0.13.8",
     "@tailwindcss/postcss": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "@wagmi/core": "^2.17.1",
     "@xstate/react": "6.0.0",
     "ai": "5.0.106",
     "better-auth": "catalog:",
