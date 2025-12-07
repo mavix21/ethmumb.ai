@@ -74,7 +74,7 @@ export function SuccessView() {
             </Button>
             <Button
               onClick={handleShare}
-              variant="outline"
+              variant="yellow"
               size="lg"
               className="flex-1"
             >
