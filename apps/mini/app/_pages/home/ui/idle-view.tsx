@@ -4,10 +4,8 @@ import { Sparkles } from "lucide-react";
 
 import { Badge } from "@ethmumb.ai/ui/components/badge";
 import { Button } from "@ethmumb.ai/ui/components/button";
-import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { useAvatar } from "../model/avatar-context";
-import { styleOptions } from "../model/style-options";
 
 function CurvyArrow() {
   return (
@@ -119,11 +117,11 @@ export function IdleView() {
         ✨ AI-Powered Avatar Magic ✨
       </p>
       <p className="text-foreground/70 z-10 mb-6 max-w-md px-4 text-center text-sm md:mb-8 md:text-base">
-        Drop your selfie, pick a vibe, and watch your photo transform into
-        stunning Mumbai-inspired art in seconds
+        Drop your selfie and watch your photo transform into stunning
+        Mumbai-inspired art in seconds
       </p>
 
-      <div className="z-10 mb-6 flex flex-wrap items-center justify-center gap-2 px-4">
+      {/* <div className="z-10 mb-6 flex flex-wrap items-center justify-center gap-2 px-4">
         <span className="text-foreground/70 mr-1 text-xs">
           Pick your style:
         </span>
@@ -146,7 +144,7 @@ export function IdleView() {
             </button>
           );
         })}
-      </div>
+      </div> */}
 
       <Button size="lg" onClick={handleUploadClick} className="w-full max-w-md">
         <Sparkles className="h-5 w-5" />
