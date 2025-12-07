@@ -106,7 +106,7 @@ export function ProcessingView() {
           </div>
 
           {/* GIF attribution */}
-          <p className="text-foreground/70 mt-2 text-center text-[10px]">
+          <p className="text-foreground/80 mt-2 text-center text-[10px]">
             Art by Dippyaman Nath, Kolkata 🇮🇳
           </p>
         </div>
@@ -116,7 +116,7 @@ export function ProcessingView() {
           <h2 className="font-display text-foreground mb-2 text-2xl font-bold md:text-3xl">
             Creating Your Avatar
           </h2>
-          <p className="text-foreground/60 text-sm">
+          <p className="text-foreground/90 text-sm">
             Something special is being crafted just for you
           </p>
         </div>
@@ -146,7 +146,7 @@ export function ProcessingView() {
         </div>
 
         {/* Reassurance */}
-        <p className="text-foreground/40 max-w-xs text-xs">
+        <p className="text-foreground/50 max-w-xs text-xs">
           This usually takes 10-20 seconds. Your avatar will be worth the wait!
         </p>
       </div>
