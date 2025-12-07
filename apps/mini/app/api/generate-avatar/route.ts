@@ -219,9 +219,11 @@ export async function POST(req: Request): Promise<Response> {
 
   // Store the generated avatar in the database (non-blocking, best-effort)
   if (fid) {
-    void storeGeneratedAvatar(fid, style, generatedFile).catch((error) => {
+    try {
+      await storeGeneratedAvatar(fid, style, generatedFile);
+    } catch (error) {
       console.error("Failed to store generated avatar:", error);
-    });
+    }
   } else {
     console.error("No fid provided; skipping storage of generated avatar");
   }
