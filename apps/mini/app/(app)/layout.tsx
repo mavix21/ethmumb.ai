@@ -16,6 +16,7 @@ import "@coinbase/onchainkit/styles.css";
 import "@ethmumb.ai/ui/globals.css";
 import "@silk-hq/components/layered-styles.css";
 
+import { env } from "@/env";
 import { Header } from "@/shared/ui/header";
 
 import { MumbaiBackground } from "./_ui/mumbai-animated-background";
@@ -24,14 +25,53 @@ export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve({
     title: minikitConfig.frame.name,
     description: minikitConfig.frame.description,
+    keywords: ["ethmumbai", "x402", "image generation", "farcaster"],
+    authors: [{ name: "mavix" }],
+    // Open Graph metadata for social sharing and embeds
+    openGraph: {
+      title: minikitConfig.frame.name,
+      description: minikitConfig.frame.description,
+      type: "website",
+      url: env.SITE_URL,
+      siteName: minikitConfig.frame.name,
+      images: [
+        {
+          url: minikitConfig.frame.heroImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "EthMumbai Avatar Generator",
+        },
+      ],
+    },
+
+    // Twitter Card metadata
+    twitter: {
+      card: "summary_large_image",
+      title: minikitConfig.frame.name,
+      description: minikitConfig.frame.description,
+      images: [minikitConfig.frame.heroImageUrl],
+    },
+
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: minikitConfig.frame.name,
+    },
+    formatDetection: {
+      telephone: false,
+    },
+    robots: {
+      index: false,
+      follow: false,
+    },
     other: {
       "fc:frame": JSON.stringify({
         version: minikitConfig.frame.version,
         imageUrl: minikitConfig.frame.heroImageUrl,
         button: {
-          title: `Launch ${minikitConfig.frame.name}`,
+          title: `Generate your ETHMumbai Avatar`,
           action: {
-            name: `Launch ${minikitConfig.frame.name}`,
+            name: `Generate your ETHMumbai Avatar`,
             type: "launch_frame",
           },
         },
