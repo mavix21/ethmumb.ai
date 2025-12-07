@@ -21,3 +21,27 @@ export const storeGeneration = mutation({
     });
   },
 });
+
+export const getByFid = query({
+  args: { fid: v.number() },
+  handler: async (ctx, args) => {
+    const generations = await ctx.db
+      .query("generations")
+      .withIndex("by_fid", (q) => q.eq("fid", args.fid))
+      .order("desc")
+      .collect();
+
+    // Get URLs for all generations
+    const generationsWithUrls = await Promise.all(
+      generations.map(async (generation) => {
+        const imageUrl = await ctx.storage.getUrl(generation.imageStorageId);
+        return {
+          ...generation,
+          imageUrl,
+        };
+      }),
+    );
+
+    return generationsWithUrls;
+  },
+});

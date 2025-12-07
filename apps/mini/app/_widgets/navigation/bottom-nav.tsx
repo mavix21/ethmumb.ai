@@ -5,7 +5,7 @@ import type { Route } from "next";
 import { memo, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Search, Users, Wallet } from "lucide-react";
+import { ImagesIcon, SparklesIcon } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
@@ -47,24 +47,12 @@ export interface BottomNavProps {
 // ============================================================================
 
 const DEFAULT_NAV_ITEMS: NavItemConfig[] = [
-  { id: "home", icon: Calendar, label: "Home", href: "/" as const },
+  { id: "create", icon: SparklesIcon, label: "Create", href: "/" as const },
   {
-    id: "discover",
-    icon: Search,
-    label: "Discover",
-    href: "/discover" as const,
-  },
-  {
-    id: "community",
-    icon: Users,
-    label: "Community",
-    href: "/community" as const,
-  },
-  {
-    id: "collection",
-    icon: Wallet,
-    label: "Collection",
-    href: "/collection" as const,
+    id: "gallery",
+    icon: ImagesIcon,
+    label: "Gallery",
+    href: "/gallery" as const,
   },
 ];
 
