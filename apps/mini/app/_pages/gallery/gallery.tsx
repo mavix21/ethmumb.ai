@@ -62,20 +62,6 @@ function GallerySkeleton() {
   );
 }
 
-interface StatItemProps {
-  value: string | number;
-  label: string;
-}
-
-function StatItem({ value, label }: StatItemProps) {
-  return (
-    <div className="bg-secondary/50 flex flex-col items-center justify-center rounded-lg py-3">
-      <span className="text-foreground text-lg font-semibold">{value}</span>
-      <span className="text-muted-foreground text-xs">{label}</span>
-    </div>
-  );
-}
-
 interface GenerationCardProps {
   imageUrl: string | null;
   style: string;
@@ -205,14 +191,6 @@ export function GalleryPage() {
     user?.username?.slice(0, 2).toUpperCase() ??
     "?";
 
-  // Mock stats - in a real app, these would come from the database
-  const stats = {
-    generations: 0,
-    collections: 0,
-    spent: "$0.00",
-    earned: "$0.00",
-  };
-
   if (isMiniAppLoading) {
     return (
       <div className="relative h-full">
@@ -259,23 +237,10 @@ export function GalleryPage() {
                     </Badge>
                   </div>
                   <p className="text-muted-foreground text-sm">
-                    Joined{" "}
-                    {new Date().toLocaleDateString("en-US", {
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {user.username ? `@${user.username}` : ""}
                   </p>
                 </div>
               </section>
-
-              {/* Stats Section - Always visible */}
-              <section className="grid grid-cols-4 gap-2">
-                <StatItem value={stats.generations} label="Generations" />
-                <StatItem value={stats.collections} label="Collections" />
-                <StatItem value={stats.spent} label="Spent" />
-                <StatItem value={stats.earned} label="Earned" />
-              </section>
-
               <Separator />
             </>
           )}
