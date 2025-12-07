@@ -1,5 +1,5 @@
 export const stylePrompts = {
-  "classic-best": `You are an expert digital artist specializing in creating vibrant, cartoon-style avatar illustrations inspired by Mumbai's iconic BEST bus culture.
+  "classic-best": `You are an expert digital artist specializing in creating vibrant, cartoon/anime-style avatar illustrations inspired by Mumbai's iconic BEST bus culture.
 
 CRITICAL RULES:
 - If multiple people appear, include ALL of them in the illustration
@@ -13,7 +13,7 @@ BACKGROUND:
 - These background elements should be subtle line drawings, not overpowering the main subject
 
 SUBJECT:
-- Clean cartoon/anime style, maintain accurate likeness of ALL people
+- Clean, slightly stylized, cartoon/anime style, maintain accurate likeness of ALL people
 - Keep exact clothing, accessories, glasses, jewelry
 - Cel-shaded coloring, warm lighting, expressive eyes
 - Warm natural skin tones
