@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, ImageIcon, Sparkles } from "lucide-react";
 
 import type { Doc } from "@ethmumb.ai/convex/_generated/dataModel";
+import { Badge } from "@ethmumb.ai/ui/components/badge";
 import { Button } from "@ethmumb.ai/ui/components/button";
 import {
   Empty,
@@ -14,7 +15,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@ethmumb.ai/ui/components/empty";
-import { Badge } from "@ethmumb.ai/ui/components/badge";
 
 type Generation = Doc<"generations"> & { imageUrl: string | null };
 
@@ -66,7 +66,7 @@ export function GenerationContent({ generation }: GenerationContentProps) {
   return (
     <div className="flex min-h-svh flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-10 flex items-center gap-3 border-b bg-background/80 px-4 py-3 backdrop-blur-sm">
+      <header className="bg-background/80 sticky top-0 z-10 flex items-center gap-3 border-b px-4 py-3 backdrop-blur-sm">
         <Button variant="ghost" size="icon" asChild>
           <Link href="/">
             <ArrowLeft className="size-5" />
@@ -102,7 +102,7 @@ export function GenerationContent({ generation }: GenerationContentProps) {
         </div>
 
         {/* CTA */}
-        <div className="mt-auto w-full max-w-md pb-6">
+        <div className="w-full max-w-md pb-6">
           <Button asChild className="w-full" size="lg">
             <Link href="/">
               <Sparkles className="mr-2 size-4" />
