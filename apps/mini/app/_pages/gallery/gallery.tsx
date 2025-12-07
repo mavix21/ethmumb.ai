@@ -112,7 +112,7 @@ function GenerationCard({ generation }: GenerationCardProps) {
             <Card.Content className="bg-background mx-4 max-w-sm overflow-hidden rounded-2xl">
               {/* Image */}
               {generation.imageUrl && (
-                <div className="relative aspect-square w-full">
+                <div className="relative aspect-square w-full overflow-hidden rounded-2xl">
                   <Image
                     src={generation.imageUrl}
                     alt={`${generation.style} generation`}
