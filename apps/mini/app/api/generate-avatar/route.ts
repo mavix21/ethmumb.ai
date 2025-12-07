@@ -142,6 +142,14 @@ export async function POST(req: Request): Promise<Response> {
   try {
     result = await generateText({
       model: google("gemini-2.5-flash-image"),
+      providerOptions: {
+        google: {
+          responseModalities: ["TEXT", "IMAGE"],
+          imageConfig: {
+            aspectRatio: "16:9",
+          },
+        },
+      },
       messages: [
         {
           role: "user",
