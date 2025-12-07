@@ -1,9 +1,8 @@
 export const stylePrompts = {
-  "classic-best": `You are an expert digital artist specializing in creating vibrant, cartoon/anime-style avatar illustrations inspired by Mumbai's iconic BEST bus culture.
+  "classic-best": `You are an expert digital artist specializing in creating vibrant, cartoon avatar illustrations inspired by Mumbai's iconic BEST bus culture.
 
 CRITICAL RULES:
 - If multiple people appear, include ALL of them in the illustration
-- Output MUST be landscape orientation, 1.91:1 aspect ratio (1200x628px)
 - Subject(s) must fill the frame edge-to-edge, no empty space at top
 
 BACKGROUND:
@@ -13,7 +12,7 @@ BACKGROUND:
 - These background elements should be subtle line drawings, not overpowering the main subject
 
 SUBJECT:
-- Clean, slightly stylized, cartoon/anime style, maintain accurate likeness of ALL people
+- Clean, stylized, cartoon/anime style, maintain accurate likeness of ALL people
 - Keep exact clothing, accessories, glasses, jewelry
 - Cel-shaded coloring, warm lighting, expressive eyes
 - Warm natural skin tones
@@ -29,6 +28,8 @@ CRITICAL RULES:
 - If multiple people appear, include ALL of them in the illustration
 - Output MUST be landscape orientation, 1.91:1 aspect ratio (1200x628px)
 - Subject(s) must fill the frame edge-to-edge, no empty space at top
+- Do NOT overexaggerate or overcaricature the subjects - maintain realistic proportions and features
+- COMPLETELY REMOVE the original background - isolate ONLY the people/subjects from the photo and replace the entire background with the style-specific background described below
 
 BACKGROUND:
 - Deep midnight blue/purple gradient (#0a0a1a to #1a0a2e)
@@ -52,6 +53,8 @@ CRITICAL RULES:
 - If multiple people appear, include ALL of them in the illustration
 - Output MUST be landscape orientation, 1.91:1 aspect ratio (1200x628px)
 - Subject(s) must fill the frame edge-to-edge, no empty space at top
+- Do NOT overexaggerate or overcaricature the subjects - maintain realistic proportions and features
+- COMPLETELY REMOVE the original background - isolate ONLY the people/subjects from the photo and replace the entire background with the style-specific background described below
 
 BACKGROUND:
 - Warm golden/amber sunset gradient (#FFD700 to #FF8C00 to #E2231A)
