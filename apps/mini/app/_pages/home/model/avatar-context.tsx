@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 import * as React from "react";
 import { useMachine } from "@xstate/react";
-import { publicActions } from "viem";
-import { useWalletClient } from "wagmi";
+import { useAccount, useConfig } from "wagmi";
+import { getWalletClient } from "wagmi/actions";
 import { wrapFetchWithPayment } from "x402-fetch";
 
 import type {
@@ -45,16 +45,46 @@ const AvatarContext = React.createContext<AvatarContextValue | null>(null);
 const MAX_PAYMENT_USDC = BigInt(0.25 * 10 ** 6);
 
 export function AvatarProvider({ children }: { children: ReactNode }) {
-  const { data: walletClient } = useWalletClient();
+  const config = useConfig();
+  const { address, chainId, connector, isConnected } = useAccount();
+  const [fetchWithPayment, setFetchWithPayment] =
+    React.useState<FetchWithPayment | null>(null);
 
-  // Create the x402-wrapped fetch when wallet client is available
-  // Extend wallet client with public actions to match x402 Signer type
-  const fetchWithPayment = React.useMemo<FetchWithPayment | null>(() => {
-    if (!walletClient) return null;
-    console.log("Creating fetchWithPayment with walletClient:", walletClient);
-    const signer = walletClient.extend(publicActions);
-    return wrapFetchWithPayment(fetch, signer, MAX_PAYMENT_USDC);
-  }, [walletClient]);
+  // Create the x402-wrapped fetch when wallet is connected
+  // Using getWalletClient with explicit connector for MiniKit/TBA compatibility
+  React.useEffect(() => {
+    async function setupPaymentFetch() {
+      if (!isConnected || !address || !chainId || !connector) {
+        setFetchWithPayment(null);
+        return;
+      }
+
+      try {
+        const walletClient = await getWalletClient(config, {
+          account: address,
+          chainId: chainId,
+          connector: connector,
+        });
+
+        console.log("Creating fetchWithPayment with walletClient:", {
+          address: walletClient.account.address,
+          chainId: walletClient.chain.id,
+        });
+
+        const wrappedFetch = wrapFetchWithPayment(
+          fetch,
+          walletClient as Parameters<typeof wrapFetchWithPayment>[1],
+          MAX_PAYMENT_USDC,
+        );
+        setFetchWithPayment(() => wrappedFetch);
+      } catch (error) {
+        console.error("Error setting up payment fetch:", error);
+        setFetchWithPayment(null);
+      }
+    }
+
+    void setupPaymentFetch();
+  }, [config, address, chainId, connector, isConnected]);
 
   const [state, send] = useMachine(avatarMachine, {
     input: {
