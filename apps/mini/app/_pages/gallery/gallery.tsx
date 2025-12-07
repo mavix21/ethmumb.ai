@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useComposeCast } from "@coinbase/onchainkit/minikit";
+import { sdk as miniappSdk } from "@farcaster/miniapp-sdk";
 import { useQuery } from "convex/react";
 import { ExternalLink, ImageIcon, LogIn, Share2 } from "lucide-react";
 
@@ -74,14 +74,14 @@ interface GenerationCardProps {
 
 function GenerationCard({ generation }: GenerationCardProps) {
   const [open, setOpen] = useState(false);
-  const { composeCast } = useComposeCast();
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const shareUrl = `${env.SITE_URL}/generation/${generation._id}`;
-    composeCast({
+    const result = await miniappSdk.actions.composeCast({
       text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
       embeds: [shareUrl],
     });
+    console.log("Compose cast result:", result);
   };
 
   return (
@@ -188,7 +188,7 @@ function AuthenticatedGallery({ fid }: { fid: number }) {
   return (
     <div className="space-y-4">
       <h3 className="text-foreground font-medium">All Generations</h3>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {generations.map((generation) => (
           <GenerationCard key={generation._id} generation={generation} />
         ))}
