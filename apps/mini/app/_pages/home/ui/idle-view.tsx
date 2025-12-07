@@ -83,6 +83,7 @@ export function IdleView() {
         <div className="relative rotate-2 rounded-2xl bg-white p-1.5 shadow-2xl transition-transform hover:rotate-0 md:p-2">
           <div className="overflow-hidden rounded-xl">
             <Image
+              priority
               key={`after-${selectedStyle}`}
               src={currentStyle.afterImage || "/placeholder.svg"}
               alt={`Example ETHMumbai avatar - ${currentStyle.name} style`}
