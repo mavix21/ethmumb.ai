@@ -118,8 +118,12 @@ export function useImageDimensions(
     img.onload = handleLoad;
     img.onerror = handleError;
 
-    // Set crossOrigin before src to handle CORS properly
-    img.crossOrigin = "anonymous";
+    // Only set crossOrigin for non-data URLs to avoid CORS issues with data URLs
+    // Data URLs don't have CORS headers and setting crossOrigin can cause failures
+    if (!imageSrc.startsWith("data:")) {
+      img.crossOrigin = "anonymous";
+    }
+
     img.src = imageSrc;
 
     // If image is already cached, onload might have fired synchronously
