@@ -12,7 +12,7 @@ import { useImageDimensions } from "../model/use-image-dimensions";
 export function SuccessView() {
   const { send, currentStyle, generatedImage, generationId } = useAvatar();
   const imageDimensions = useImageDimensions(generatedImage);
-  const { composeCastAsync } = useComposeCast();
+  const { composeCast } = useComposeCast();
 
   const handleDownload = () => {
     if (generatedImage) {
@@ -23,11 +23,11 @@ export function SuccessView() {
     }
   };
 
-  const handleShare = async () => {
+  const handleShare = () => {
     const shareUrl = generationId
       ? `${env.SITE_URL}/generation/${generationId}`
       : env.SITE_URL;
-    await composeCastAsync({
+    composeCast({
       text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
       embeds: [shareUrl],
     });
