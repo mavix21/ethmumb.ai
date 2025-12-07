@@ -3,10 +3,18 @@
 import type { ReactNode } from "react";
 import * as React from "react";
 import { useMachine } from "@xstate/react";
+import { publicActions } from "viem";
+import { useWalletClient } from "wagmi";
+import { wrapFetchWithPayment } from "x402-fetch";
 
-import type { AvatarError, AvatarEvent, StyleId } from "./avatar-machine";
-import { avatarMachine } from "./avatar-machine";
+import type {
+  AvatarError,
+  AvatarEvent,
+  FetchWithPayment,
+  StyleId,
+} from "./avatar-machine";
 import type { StyleOption } from "./style-options";
+import { avatarMachine } from "./avatar-machine";
 import { getStyleById } from "./style-options";
 
 interface AvatarContextValue {
@@ -18,10 +26,10 @@ interface AvatarContextValue {
   isNsfwViolation: boolean;
   isNsfwModelLoading: boolean;
   isUserConfirming: boolean;
-  isPaying: boolean;
-  isProcessing: boolean;
+  isGenerating: boolean;
   isServerError: boolean;
   isSuccess: boolean;
+  isWalletConnected: boolean;
   selectedStyle: StyleId;
   currentStyle: StyleOption;
   uploadedImage: string | null;
@@ -33,8 +41,34 @@ interface AvatarContextValue {
 
 const AvatarContext = React.createContext<AvatarContextValue | null>(null);
 
+// Max payment amount: $0.25 USDC (endpoint costs $0.20)
+const MAX_PAYMENT_USDC = BigInt(0.25 * 10 ** 6);
+
 export function AvatarProvider({ children }: { children: ReactNode }) {
-  const [state, send] = useMachine(avatarMachine);
+  const { data: walletClient } = useWalletClient();
+
+  // Create the x402-wrapped fetch when wallet client is available
+  // Extend wallet client with public actions to match x402 Signer type
+  const fetchWithPayment = React.useMemo<FetchWithPayment | null>(() => {
+    if (!walletClient) return null;
+    const signer = walletClient.extend(publicActions);
+    return wrapFetchWithPayment(fetch, signer, MAX_PAYMENT_USDC);
+  }, [walletClient]);
+
+  const [state, send] = useMachine(avatarMachine, {
+    input: {
+      fetchWithPayment,
+    },
+  });
+
+  // Sync wallet connection state with machine
+  React.useEffect(() => {
+    if (fetchWithPayment) {
+      send({ type: "WALLET_CONNECTED", fetchWithPayment });
+    } else {
+      send({ type: "WALLET_DISCONNECTED" });
+    }
+  }, [fetchWithPayment, send]);
 
   const value: AvatarContextValue = {
     state,
@@ -44,10 +78,10 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     isNsfwViolation: state.matches("nsfw_violation"),
     isNsfwModelLoading: state.context.isModelLoading,
     isUserConfirming: state.matches("user_confirming"),
-    isPaying: state.matches("paying"),
-    isProcessing: state.matches("processing"),
+    isGenerating: state.matches("generating"),
     isServerError: state.matches("error"),
     isSuccess: state.matches("success"),
+    isWalletConnected: state.context.fetchWithPayment !== null,
     selectedStyle: state.context.selectedStyle,
     currentStyle: getStyleById(state.context.selectedStyle),
     uploadedImage: state.context.uploadedImage,

@@ -1,6 +1,6 @@
 import type * as nsfwjs from "nsfwjs";
 import imageCompression from "browser-image-compression";
-import { assign, fromPromise, setup } from "xstate";
+import { and, assign, fromPromise, setup } from "xstate";
 
 // ============================================================================
 // Constants
@@ -33,7 +33,14 @@ const COMPRESSION_OPTIONS: Parameters<typeof imageCompression>[1] = {
 // Error Types
 // ============================================================================
 
-type AvatarErrorType = "payment" | "processing" | "nsfw" | "analysis";
+type AvatarErrorType =
+  | "payment"
+  | "payment_rejected"
+  | "insufficient_balance"
+  | "wallet_not_connected"
+  | "processing"
+  | "nsfw"
+  | "analysis";
 
 export interface AvatarError {
   type: AvatarErrorType;
@@ -51,6 +58,58 @@ const createError = (
   retryable,
 });
 
+/**
+ * Parse x402 payment errors into specific error types
+ */
+function parsePaymentError(error: unknown): AvatarError {
+  const message = error instanceof Error ? error.message : String(error);
+  const lowerMessage = message.toLowerCase();
+
+  if (
+    lowerMessage.includes("rejected") ||
+    lowerMessage.includes("denied") ||
+    lowerMessage.includes("cancelled") ||
+    lowerMessage.includes("user rejected")
+  ) {
+    return createError(
+      "payment_rejected",
+      "Payment was rejected. Please try again.",
+      true,
+    );
+  }
+
+  if (
+    lowerMessage.includes("insufficient") ||
+    lowerMessage.includes("balance")
+  ) {
+    return createError(
+      "insufficient_balance",
+      "Insufficient USDC balance. Please add funds and try again.",
+      true,
+    );
+  }
+
+  // Generic payment error
+  return createError("payment", `Payment failed: ${message}`, true);
+}
+
+// ============================================================================
+// Types
+// ============================================================================
+
+/**
+ * Fetch function wrapped with x402 payment handling.
+ * Uses x402's return type which is narrower than globalThis.fetch
+ */
+export type FetchWithPayment = (
+  input: RequestInfo,
+  init?: RequestInit,
+) => Promise<Response>;
+
+export interface AvatarMachineInput {
+  fetchWithPayment: FetchWithPayment | null;
+}
+
 // ============================================================================
 // Context & Events
 // ============================================================================
@@ -66,6 +125,8 @@ export interface AvatarContext {
   nsfwModel: nsfwjs.NSFWJS | null;
   isModelLoading: boolean;
   nsfwScore: number | null;
+  // x402 payment fetch - injected from React context
+  fetchWithPayment: FetchWithPayment | null;
 }
 
 export type AvatarEvent =
@@ -75,7 +136,9 @@ export type AvatarEvent =
   | { type: "CANCEL" }
   | { type: "RESET" }
   | { type: "RETRY" }
-  | { type: "START_OVER" };
+  | { type: "START_OVER" }
+  | { type: "WALLET_CONNECTED"; fetchWithPayment: FetchWithPayment }
+  | { type: "WALLET_DISCONNECTED" };
 
 // ============================================================================
 // Helpers
@@ -184,14 +247,8 @@ interface ServiceInput {
   image: string;
   style: StyleId;
   fid?: number;
+  fetchWithPayment: FetchWithPayment;
 }
-
-// Mock payment service
-// TODO: replace with real payment integration
-const mockPaymentService = fromPromise<void, ServiceInput>(async () => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return;
-});
 
 // Response schema for the generate-avatar API
 interface GenerateAvatarResponse {
@@ -210,9 +267,20 @@ interface GenerateAvatarResult {
   generationId: string | null;
 }
 
-const generateAvatarService = fromPromise<GenerateAvatarResult, ServiceInput>(
+/**
+ * Generate avatar actor - handles x402 payment + generation.
+ *
+ * This uses fromPromise which blocks during the entire x402 flow:
+ * 1. First request returns 402 with payment requirements
+ * 2. x402-fetch prompts wallet for signature (user sees popup)
+ * 3. After signature, request is re-sent with payment header
+ * 4. Server generates the image and returns the response
+ *
+ * The UI stays in the "generating" state during this entire process.
+ */
+const generateAvatarActor = fromPromise<GenerateAvatarResult, ServiceInput>(
   async ({ input }) => {
-    const response = await fetch("/api/generate-avatar", {
+    const response = await input.fetchWithPayment("/api/generate-avatar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -240,16 +308,17 @@ export const avatarMachine = setup({
   types: {
     context: {} as AvatarContext,
     events: {} as AvatarEvent,
+    input: {} as AvatarMachineInput,
   },
   actors: {
     loadModel: loadModelActor,
     analyzeImage: analyzeImageActor,
-    paymentService: mockPaymentService,
-    processingService: generateAvatarService,
+    generateAvatarActor: generateAvatarActor,
   },
   guards: {
     hasUploadedFile: ({ context }) => context.uploadedFile !== null,
     hasUploadedImage: ({ context }) => context.uploadedImage !== null,
+    walletConnected: ({ context }) => context.fetchWithPayment !== null,
   },
   actions: {
     setStyle: assign({
@@ -272,8 +341,14 @@ export const avatarMachine = setup({
       nsfwScore: (_, params: { score: number }) => params.score,
     }),
     setGeneratedImage: assign({
-      generatedImage: (_, params: { image: string; generationId: string | null }) => params.image,
-      generationId: (_, params: { image: string; generationId: string | null }) => params.generationId,
+      generatedImage: (
+        _,
+        params: { image: string; generationId: string | null },
+      ) => params.image,
+      generationId: (
+        _,
+        params: { image: string; generationId: string | null },
+      ) => params.generationId,
     }),
     setError: assign({
       error: (_, params: { error: AvatarError }) => params.error,
@@ -296,11 +371,24 @@ export const avatarMachine = setup({
         return null;
       },
     }),
+    setFetchWithPayment: assign({
+      fetchWithPayment: ({
+        event,
+      }: {
+        event: AvatarEvent;
+      }): FetchWithPayment | null => {
+        if (event.type === "WALLET_CONNECTED") return event.fetchWithPayment;
+        return null;
+      },
+    }),
+    clearFetchWithPayment: assign({
+      fetchWithPayment: () => null,
+    }),
   },
 }).createMachine({
   id: "avatarMachine",
   initial: "idle",
-  context: {
+  context: ({ input }) => ({
     fid: null,
     selectedStyle: STYLES.CLASSIC_BEST,
     uploadedImage: null,
@@ -311,6 +399,17 @@ export const avatarMachine = setup({
     nsfwModel: null,
     isModelLoading: true,
     nsfwScore: null,
+    fetchWithPayment: input.fetchWithPayment,
+    pendingResponse: null,
+  }),
+  // Global event handlers for wallet connection changes
+  on: {
+    WALLET_CONNECTED: {
+      actions: "setFetchWithPayment",
+    },
+    WALLET_DISCONNECTED: {
+      actions: "clearFetchWithPayment",
+    },
   },
   invoke: {
     id: "modelLoader",
@@ -406,8 +505,8 @@ export const avatarMachine = setup({
           actions: "setStyle",
         },
         CONFIRM_PAY: {
-          target: "paying",
-          guard: "hasUploadedImage",
+          target: "generating",
+          guard: and(["hasUploadedImage", "walletConnected"]),
           actions: "setFid",
         },
         CANCEL: {
@@ -416,49 +515,24 @@ export const avatarMachine = setup({
         },
       },
     },
-    paying: {
+    // User clicked "Generate" - x402 payment flow is happening
+    // This state covers: wallet popup, payment confirmation, and image generation
+    generating: {
       invoke: {
-        id: "payment",
-        src: "paymentService",
+        id: "generator",
+        src: "generateAvatarActor",
         input: ({ context }) => {
           if (!context.uploadedImage) {
             throw new Error("No image uploaded - this should never happen");
           }
-          return {
-            image: context.uploadedImage,
-            style: context.selectedStyle,
-          };
-        },
-        onDone: {
-          target: "processing",
-        },
-        onError: {
-          target: "error",
-          actions: assign({
-            error: () =>
-              createError("payment", "Payment failed. Please try again.", true),
-          }),
-        },
-      },
-      on: {
-        CANCEL: {
-          target: "idle",
-          actions: "resetContext",
-        },
-      },
-    },
-    processing: {
-      invoke: {
-        id: "processing",
-        src: "processingService",
-        input: ({ context }) => {
-          if (!context.uploadedImage) {
-            throw new Error("No image uploaded - this should never happen");
+          if (!context.fetchWithPayment) {
+            throw new Error("Wallet not connected - this should never happen");
           }
           return {
             image: context.uploadedImage,
             style: context.selectedStyle,
             fid: context.fid ?? undefined,
+            fetchWithPayment: context.fetchWithPayment,
           };
         },
         onDone: {
@@ -471,12 +545,7 @@ export const avatarMachine = setup({
         onError: {
           target: "error",
           actions: assign({
-            error: () =>
-              createError(
-                "processing",
-                "Image processing failed due to server error.",
-                true,
-              ),
+            error: ({ event }) => parsePaymentError(event.error),
           }),
         },
       },
@@ -484,8 +553,8 @@ export const avatarMachine = setup({
     error: {
       on: {
         RETRY: {
-          target: "paying",
-          guard: "hasUploadedImage",
+          target: "generating",
+          guard: and(["hasUploadedImage", "walletConnected"]),
         },
         START_OVER: {
           target: "idle",

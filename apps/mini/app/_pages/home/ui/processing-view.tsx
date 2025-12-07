@@ -6,10 +6,9 @@ import { cn } from "@ethmumb.ai/ui/lib/utils";
 import { triggerHaptics } from "@/lib/farcaster/utils";
 import { useMiniApp } from "@/shared/context/miniapp-context";
 
-import { useAvatar } from "../model/avatar-context";
-
 // Psychologically crafted messages - builds anticipation and emotional connection
 const MESSAGES = [
+  { text: "Confirm the payment in your wallet...", emoji: "💳" },
   { text: "Boarding the BEST bus to Mumbai...", emoji: "🚌" },
   { text: "Passing through the Gateway of India...", emoji: "🏛️" },
   { text: "Capturing the spirit of the city...", emoji: "✨" },
@@ -22,7 +21,6 @@ const MESSAGES = [
 
 export function ProcessingView() {
   const { context, capabilities } = useMiniApp();
-  const { currentStyle } = useAvatar();
   const [messageIndex, setMessageIndex] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
   const [pulseCount, setPulseCount] = React.useState(0);

@@ -17,8 +17,7 @@ export function HomePage() {
     isAnalyzing,
     isNsfwViolation,
     isUserConfirming,
-    isPaying,
-    isProcessing,
+    isGenerating,
     isServerError,
     isSuccess,
   } = useAvatar();
@@ -30,8 +29,8 @@ export function HomePage() {
       </Activity>
       {isAnalyzing && <AnalyzingView />}
       {isNsfwViolation && <NsfwViolationView />}
-      {(isUserConfirming || isPaying) && <ConfirmationView />}
-      {isProcessing && <ProcessingView />}
+      {isUserConfirming && <ConfirmationView />}
+      {isGenerating && <ProcessingView />}
       {isServerError && <ErrorView />}
       {isSuccess && <SuccessView />}
     </>

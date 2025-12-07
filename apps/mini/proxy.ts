@@ -1,18 +1,25 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { Address } from "viem";
+import { facilitator } from "@coinbase/x402";
+import { paymentMiddleware } from "x402-next";
 
-import { getToken } from "@/auth/server";
+import { env } from "@/env";
 
-export async function proxy(request: NextRequest) {
-  const token = await getToken();
+const payTo = env.RESOURCE_WALLET_ADDRESS as Address;
 
-  if (!token) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  return NextResponse.next();
-}
+export const proxy = paymentMiddleware(
+  payTo,
+  {
+    "/api/generate-avatar": {
+      price: "$0.2",
+      network: "base",
+      config: {
+        description: "Generate ETHMumbai Avatar",
+      },
+    },
+  },
+  facilitator,
+);
 
 export const config = {
-  matcher: ["/protected"],
+  matcher: ["/api/generate-avatar"],
 };

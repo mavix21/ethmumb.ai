@@ -1,11 +1,5 @@
 import Image from "next/image";
-import {
-  ArrowLeft,
-  BusFrontIcon,
-  ChevronDown,
-  Loader2,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, BusFrontIcon, ChevronDown, Sparkles } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 import {
@@ -23,8 +17,14 @@ import { styleOptions } from "../model/style-options";
 import { useImageDimensions } from "../model/use-image-dimensions";
 
 export function ConfirmationView() {
-  const { send, selectedStyle, currentStyle, uploadedImage, isPaying } =
-    useAvatar();
+  const {
+    send,
+    selectedStyle,
+    currentStyle,
+    uploadedImage,
+    isWalletConnected,
+    isGenerating,
+  } = useAvatar();
   const { context } = useMiniApp();
   const imageDimensions = useImageDimensions(uploadedImage);
 
@@ -35,7 +35,6 @@ export function ConfirmationView() {
       {/* Back button */}
       <button
         onClick={() => send({ type: "CANCEL" })}
-        disabled={isPaying}
         className="text-foreground/70 hover:text-foreground absolute top-4 left-4 z-20 flex items-center gap-1.5 text-sm transition-colors disabled:pointer-events-none disabled:opacity-50 md:top-8 md:left-8"
       >
         <ArrowLeft className="h-4 w-4" />
@@ -77,7 +76,7 @@ export function ConfirmationView() {
 
             {/* Style badge with dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger asChild disabled={isPaying}>
+              <DropdownMenuTrigger asChild>
                 <button className="bg-brand-cream text-best-red hover:bg-brand-cream/90 absolute -right-2 -bottom-2 flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium shadow-lg transition-colors disabled:pointer-events-none disabled:opacity-50">
                   <CurrentIcon className="h-3.5 w-3.5" />
                   {currentStyle.name}
@@ -125,19 +124,21 @@ export function ConfirmationView() {
             onClick={() =>
               send({ type: "CONFIRM_PAY", fid: context?.user.fid })
             }
-            disabled={isPaying}
+            disabled={!isWalletConnected || isGenerating}
             size="lg"
             className="w-full font-medium"
           >
-            {isPaying ? (
+            {!isWalletConnected ? (
+              <>Connect Wallet to Generate</>
+            ) : isGenerating ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Processing payment...
+                <Sparkles className="h-5 w-5 animate-pulse" />
+                Confirm in Wallet...
               </>
             ) : (
               <>
                 <Sparkles className="h-5 w-5" />
-                Generate My Avatar
+                Pay 0.2 USDC and Generate My Avatar
               </>
             )}
           </Button>
@@ -146,7 +147,7 @@ export function ConfirmationView() {
             variant="ghost"
             size="lg"
             onClick={() => send({ type: "CANCEL" })}
-            disabled={isPaying}
+            disabled={isGenerating}
           >
             Choose a different photo
           </Button>
