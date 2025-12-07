@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowLeft, BusFrontIcon, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowLeft, ChevronDown, Sparkles } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
 import {
@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@ethmumb.ai/ui/components/dropdown-menu";
+import { Skeleton } from "@ethmumb.ai/ui/components/skeleton";
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
 import { useMiniApp } from "@/shared/context/miniapp-context";
@@ -26,7 +27,8 @@ export function ConfirmationView() {
     isGenerating,
   } = useAvatar();
   const { context } = useMiniApp();
-  const imageDimensions = useImageDimensions(uploadedImage);
+  const { dimensions: imageDimensions, isLoading: isDimensionsLoading } =
+    useImageDimensions(uploadedImage);
 
   const CurrentIcon = currentStyle.icon;
 
@@ -57,21 +59,26 @@ export function ConfirmationView() {
         </div>
 
         {/* Image preview with natural aspect ratio */}
-        {uploadedImage && imageDimensions && (
+        {uploadedImage && (
           <div className="relative">
             {/* Glow effect */}
             <div className="bg-brand-cream/20 absolute inset-0 -z-10 blur-3xl" />
 
-            {/* Image container */}
+            {/* Image container with loading state */}
             <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              <Image
-                src={uploadedImage}
-                alt="Your photo"
-                width={imageDimensions.width}
-                height={imageDimensions.height}
-                className="block h-auto max-h-88 w-auto"
-                priority
-              />
+              {isDimensionsLoading || !imageDimensions ? (
+                <Skeleton className="h-[300px] w-[300px]" />
+              ) : (
+                <Image
+                  src={uploadedImage}
+                  alt="Your photo"
+                  width={imageDimensions.width}
+                  height={imageDimensions.height}
+                  className="block h-auto max-h-88 w-auto"
+                  priority
+                  unoptimized
+                />
+              )}
             </div>
 
             {/* Style badge with dropdown */}
@@ -154,56 +161,5 @@ export function ConfirmationView() {
         </div>
       </div>
     </main>
-  );
-}
-
-function BestBusTicketPrice() {
-  return (
-    <div className="relative">
-      {/* Ticket notches - left side */}
-      <div className="bg-background absolute top-1/2 -left-2 h-4 w-4 -translate-y-1/2 rounded-full" />
-      {/* Ticket notches - right side */}
-      <div className="bg-background absolute top-1/2 -right-2 h-4 w-4 -translate-y-1/2 rounded-full" />
-
-      <div className="bg-brand-cream border-best-red relative overflow-hidden rounded-lg border-2 border-dashed px-6 py-4">
-        {/* Diagonal stripes background pattern */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `repeating-linear-gradient(
-                  45deg,
-                  #e2231a,
-                  #e2231a 1px,
-                  transparent 1px,
-                  transparent 8px
-                )`,
-          }}
-        />
-
-        {/* Ticket content */}
-        <div className="relative flex items-center gap-4">
-          {/* Left: Route style badge */}
-          <div className="bg-best-red flex h-12 w-12 shrink-0 items-center justify-center rounded">
-            <BusFrontIcon />
-          </div>
-
-          {/* Center: Price info */}
-          <div className="flex-1 text-left">
-            <p className="text-best-red font-mono text-xl font-bold tracking-tight">
-              0.25 USDC
-            </p>
-            <p className="text-best-red/60 font-mono text-xs tracking-wider uppercase">
-              One-time fare
-            </p>
-          </div>
-
-          {/* Right: Serial number style */}
-          <div className="border-best-red/30 text-best-red/40 shrink-0 border-l pl-3 font-mono text-[10px]">
-            <div>AVATAR</div>
-            <div>GEN-001</div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
