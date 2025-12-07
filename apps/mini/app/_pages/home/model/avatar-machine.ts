@@ -475,15 +475,7 @@ export const avatarMachine = setup({
             actions: assign({
               nsfwScore: ({ event }) => event.output.score,
               // Update with compressed image data for API transport
-              uploadedImage: ({ event }) => {
-                const dataUrl = event.output.compressedDataUrl;
-                console.log("[avatarMachine] Setting uploadedImage:", {
-                  length: dataUrl.length,
-                  prefix: dataUrl.substring(0, 100),
-                  isValidDataUrl: dataUrl.startsWith("data:image/"),
-                });
-                return dataUrl;
-              },
+              uploadedImage: ({ event }) => event.output.compressedDataUrl,
               uploadedFile: ({ event }) => event.output.compressedFile,
             }),
           },

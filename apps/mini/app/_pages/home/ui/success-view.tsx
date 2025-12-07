@@ -49,7 +49,7 @@ export function SuccessView() {
           </p>
         </div>
 
-        {/* Generated image - using native img for reliable data URL rendering */}
+        {/* Generated image - using background-image for reliable data URL rendering */}
         {generatedImage && (
           <div className="relative">
             {/* Glow effect */}
@@ -57,11 +57,11 @@ export function SuccessView() {
 
             {/* Image container */}
             <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={generatedImage}
-                alt="Your ETHMumbai avatar"
-                className="block max-h-[360px] max-w-[360px] object-contain"
+              <div
+                role="img"
+                aria-label="Your ETHMumbai avatar"
+                className="h-[300px] w-[300px] bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${generatedImage})` }}
               />
             </div>
           </div>
