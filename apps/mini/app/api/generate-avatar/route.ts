@@ -64,6 +64,7 @@ const generateAvatarRequestSchema = z.object({
 // Response types
 interface GenerateAvatarResponse {
   imageUrl: string;
+  generationId: string | null;
   success: true;
 }
 
@@ -217,10 +218,11 @@ export async function POST(req: Request): Promise<Response> {
 
   const generatedImageUrl = `data:${generatedFile.mediaType};base64,${generatedFile.base64}`;
 
-  // Store the generated avatar in the database (non-blocking, best-effort)
+  // Store the generated avatar in the database
+  let generationId: string | null = null;
   if (fid) {
     try {
-      await storeGeneratedAvatar(fid, style, generatedFile);
+      generationId = await storeGeneratedAvatar(fid, style, generatedFile);
     } catch (error) {
       console.error("Failed to store generated avatar:", error);
     }
@@ -230,6 +232,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const response: GenerateAvatarResponse = {
     imageUrl: generatedImageUrl,
+    generationId,
     success: true,
   };
 
@@ -262,7 +265,7 @@ async function storeGeneratedAvatar(
   fid: number,
   style: keyof typeof stylePrompts,
   generatedFile: { base64: string; mediaType: string },
-): Promise<void> {
+): Promise<string> {
   // Get a temporary upload URL from Convex
   const uploadUrl = await fetchMutation(api.storage.generateUploadUrl);
   console.warn("Obtained upload URL from Convex storage", { uploadUrl });
@@ -305,4 +308,5 @@ async function storeGeneratedAvatar(
     style,
   });
   console.warn("Stored generation record in database", { genId });
+  return genId;
 }
