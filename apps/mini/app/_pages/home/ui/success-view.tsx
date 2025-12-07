@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useComposeCast } from "@coinbase/onchainkit/minikit";
+import { sdk as miniappSdk } from "@farcaster/miniapp-sdk";
 import { Download, Plus, Share2 } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
@@ -12,7 +12,6 @@ import { useImageDimensions } from "../model/use-image-dimensions";
 export function SuccessView() {
   const { send, currentStyle, generatedImage, generationId } = useAvatar();
   const imageDimensions = useImageDimensions(generatedImage);
-  const { composeCast } = useComposeCast();
 
   const handleDownload = () => {
     if (generatedImage) {
@@ -23,14 +22,15 @@ export function SuccessView() {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const shareUrl = generationId
       ? `${env.SITE_URL}/generation/${generationId}`
       : env.SITE_URL;
-    composeCast({
+    const result = await miniappSdk.actions.composeCast({
       text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
       embeds: [shareUrl],
     });
+    console.log("Compose cast result:", result);
   };
 
   return (
