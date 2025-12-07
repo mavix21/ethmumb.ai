@@ -26,6 +26,7 @@ interface AvatarContextValue {
   currentStyle: StyleOption;
   uploadedImage: string | null;
   generatedImage: string | null;
+  generationId: string | null;
   error: AvatarError | null;
   nsfwScore: number | null;
 }
@@ -51,6 +52,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     currentStyle: getStyleById(state.context.selectedStyle),
     uploadedImage: state.context.uploadedImage,
     generatedImage: state.context.generatedImage,
+    generationId: state.context.generationId,
     error: state.context.error,
     nsfwScore: state.context.nsfwScore,
   };

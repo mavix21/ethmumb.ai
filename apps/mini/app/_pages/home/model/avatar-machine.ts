@@ -61,6 +61,7 @@ export interface AvatarContext {
   uploadedImage: string | null;
   uploadedFile: File | null;
   generatedImage: string | null;
+  generationId: string | null;
   error: AvatarError | null;
   nsfwModel: nsfwjs.NSFWJS | null;
   isModelLoading: boolean;
@@ -195,6 +196,7 @@ const mockPaymentService = fromPromise<void, ServiceInput>(async () => {
 // Response schema for the generate-avatar API
 interface GenerateAvatarResponse {
   imageUrl: string;
+  generationId: string | null;
   success: true;
 }
 
@@ -203,7 +205,12 @@ interface GenerateAvatarErrorResponse {
   details?: string[];
 }
 
-const generateAvatarService = fromPromise<string, ServiceInput>(
+interface GenerateAvatarResult {
+  imageUrl: string;
+  generationId: string | null;
+}
+
+const generateAvatarService = fromPromise<GenerateAvatarResult, ServiceInput>(
   async ({ input }) => {
     const response = await fetch("/api/generate-avatar", {
       method: "POST",
@@ -221,7 +228,7 @@ const generateAvatarService = fromPromise<string, ServiceInput>(
     }
 
     const data = (await response.json()) as GenerateAvatarResponse;
-    return data.imageUrl;
+    return { imageUrl: data.imageUrl, generationId: data.generationId };
   },
 );
 
@@ -265,7 +272,8 @@ export const avatarMachine = setup({
       nsfwScore: (_, params: { score: number }) => params.score,
     }),
     setGeneratedImage: assign({
-      generatedImage: (_, params: { image: string }) => params.image,
+      generatedImage: (_, params: { image: string; generationId: string | null }) => params.image,
+      generationId: (_, params: { image: string; generationId: string | null }) => params.generationId,
     }),
     setError: assign({
       error: (_, params: { error: AvatarError }) => params.error,
@@ -278,6 +286,7 @@ export const avatarMachine = setup({
       uploadedImage: () => null,
       uploadedFile: () => null,
       generatedImage: () => null,
+      generationId: () => null,
       error: () => null,
       nsfwScore: () => null,
     }),
@@ -297,6 +306,7 @@ export const avatarMachine = setup({
     uploadedImage: null,
     uploadedFile: null,
     generatedImage: null,
+    generationId: null,
     error: null,
     nsfwModel: null,
     isModelLoading: true,
@@ -454,7 +464,8 @@ export const avatarMachine = setup({
         onDone: {
           target: "success",
           actions: assign({
-            generatedImage: ({ event }) => event.output,
+            generatedImage: ({ event }) => event.output.imageUrl,
+            generationId: ({ event }) => event.output.generationId,
           }),
         },
         onError: {

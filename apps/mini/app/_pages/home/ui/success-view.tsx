@@ -1,14 +1,18 @@
 import Image from "next/image";
+import { useComposeCast } from "@coinbase/onchainkit/minikit";
 import { Download, Plus, Share2 } from "lucide-react";
 
 import { Button } from "@ethmumb.ai/ui/components/button";
+
+import { ROOT_URL } from "@/lib/constants";
 
 import { useAvatar } from "../model/avatar-context";
 import { useImageDimensions } from "../model/use-image-dimensions";
 
 export function SuccessView() {
-  const { send, currentStyle, generatedImage } = useAvatar();
+  const { send, currentStyle, generatedImage, generationId } = useAvatar();
   const imageDimensions = useImageDimensions(generatedImage);
+  const { composeCastAsync } = useComposeCast();
 
   const handleDownload = () => {
     if (generatedImage) {
@@ -19,11 +23,14 @@ export function SuccessView() {
     }
   };
 
-  const handleShare = () => {
-    const text = encodeURIComponent(
-      "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
-    );
-    window.open(`https://warpcast.com/~/compose?text=${text}`, "_blank");
+  const handleShare = async () => {
+    const shareUrl = generationId
+      ? `${ROOT_URL}/generation/${generationId}`
+      : ROOT_URL;
+    await composeCastAsync({
+      text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
+      embeds: [shareUrl],
+    });
   };
 
   return (
