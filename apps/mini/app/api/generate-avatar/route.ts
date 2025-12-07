@@ -124,6 +124,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const { image, style, fid } = parseResult.data;
+  console.warn({ image, style, fid: fid ?? "fid not provided" });
   const prompt = stylePrompts[style];
 
   // Parse the data URL
