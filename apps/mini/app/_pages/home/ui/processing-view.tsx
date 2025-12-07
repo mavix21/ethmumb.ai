@@ -1,6 +1,5 @@
 import * as React from "react";
 import Image from "next/image";
-import { Bus } from "lucide-react";
 
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
@@ -23,7 +22,7 @@ const MESSAGES = [
 
 export function ProcessingView() {
   const { context, capabilities } = useMiniApp();
-  const { currentStyle, uploadedImage } = useAvatar();
+  const { currentStyle } = useAvatar();
   const [messageIndex, setMessageIndex] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
   const [pulseCount, setPulseCount] = React.useState(0);
@@ -95,50 +94,23 @@ export function ProcessingView() {
             )}
           />
 
-          {/* Image container with shimmer effect */}
+          {/* Minting GIF container */}
           <div className="relative overflow-hidden rounded-2xl border-4 border-white/50 shadow-2xl">
-            {uploadedImage && (
-              <div className="relative h-56 w-56">
-                <Image
-                  src={uploadedImage}
-                  alt="Your photo being transformed"
-                  fill
-                  className="object-cover opacity-70 blur-[2px] grayscale"
-                />
-                {/* Shimmer overlay */}
-                <div className="animate-shimmer absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent" />
-              </div>
-            )}
-
-            {/* Minting indicator */}
-            <div className="bg-best-red/90 absolute inset-0 flex items-center justify-center">
-              <div className="flex flex-col items-center gap-2">
-                <div className="relative">
-                  <Bus
-                    className={cn(
-                      "text-brand-cream h-12 w-12 transition-transform duration-300",
-                      pulseCount % 2 === 0 ? "scale-100" : "scale-110",
-                    )}
-                  />
-                  {/* Ping effect on haptic */}
-                  <div
-                    className={cn(
-                      "bg-brand-cream absolute inset-0 rounded-full opacity-0 transition-all duration-500",
-                      pulseCount > 0 && "animate-ping opacity-30",
-                    )}
-                  />
-                </div>
-                <span className="text-brand-cream/80 text-xs font-medium">
-                  Minting...
-                </span>
-              </div>
+            <div className="relative h-56 w-56">
+              <Image
+                src="/india-bus.gif"
+                alt="Minting your avatar..."
+                fill
+                className="object-cover"
+                unoptimized
+              />
             </div>
           </div>
 
-          {/* Style badge */}
-          <div className="bg-brand-cream text-best-red absolute -right-2 -bottom-2 rounded-full px-3 py-1 text-xs font-medium shadow-lg">
-            {currentStyle.name}
-          </div>
+          {/* GIF attribution */}
+          <p className="text-foreground/70 mt-2 text-center text-[10px]">
+            Art by Dippyaman Nath, Kolkata 🇮🇳
+          </p>
         </div>
 
         {/* Header */}
