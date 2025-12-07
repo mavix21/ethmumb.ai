@@ -22,6 +22,20 @@ export const storeGeneration = mutation({
   },
 });
 
+export const getById = query({
+  args: { id: v.string() },
+  handler: async (ctx, args) => {
+    const normalizedId = ctx.db.normalizeId("generations", args.id);
+    if (!normalizedId) return null;
+
+    const generation = await ctx.db.get(normalizedId);
+    if (!generation) return null;
+
+    const imageUrl = await ctx.storage.getUrl(generation.imageStorageId);
+    return { ...generation, imageUrl };
+  },
+});
+
 export const getByFid = query({
   args: { fid: v.number() },
   handler: async (ctx, args) => {
