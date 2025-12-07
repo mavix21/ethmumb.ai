@@ -76,7 +76,7 @@ function GenerationCard({ generation }: GenerationCardProps) {
   const [open, setOpen] = useState(false);
 
   const handleShare = async () => {
-    const shareUrl = `${window.location.href}/generation/${generation._id}`;
+    const shareUrl = `${env.NEXT_PUBLIC_URL}/generation/${generation._id}`;
     const result = await miniappSdk.actions.composeCast({
       text: "Check out my ETHMumbai avatar! 🚌✨ Created with the ETHMumbai Avatar Generator",
       embeds: [shareUrl],
