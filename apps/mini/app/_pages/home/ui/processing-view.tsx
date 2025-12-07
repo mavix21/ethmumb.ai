@@ -4,6 +4,9 @@ import { Bus } from "lucide-react";
 
 import { cn } from "@ethmumb.ai/ui/lib/utils";
 
+import { triggerHaptics } from "@/lib/farcaster/utils";
+import { useMiniApp } from "@/shared/context/miniapp-context";
+
 import { useAvatar } from "../model/avatar-context";
 
 // Psychologically crafted messages - builds anticipation and emotional connection
@@ -18,20 +21,8 @@ const MESSAGES = [
   { text: "Your avatar is taking shape...", emoji: "🖼️" },
 ] as const;
 
-// Haptic patterns - varying intensities for "minting kicks"
-const triggerHaptic = (intensity: "light" | "medium" | "heavy") => {
-  if (!("vibrate" in navigator)) return;
-
-  const patterns = {
-    light: [10],
-    medium: [20, 30, 20],
-    heavy: [30, 50, 30, 50, 30],
-  };
-
-  navigator.vibrate(patterns[intensity]);
-};
-
 export function ProcessingView() {
+  const { context, capabilities } = useMiniApp();
   const { currentStyle, uploadedImage } = useAvatar();
   const [messageIndex, setMessageIndex] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
@@ -41,11 +32,11 @@ export function ProcessingView() {
   React.useEffect(() => {
     const messageInterval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % MESSAGES.length);
-      triggerHaptic("light");
+      triggerHaptics(context, capabilities, "haptics.impactOccurred", "light");
     }, 3000);
 
     return () => clearInterval(messageInterval);
-  }, []);
+  }, [context, capabilities]);
 
   // Progress animation with "minting kicks"
   React.useEffect(() => {
@@ -74,13 +65,18 @@ export function ProcessingView() {
 
     const timeouts = hapticPattern.map(({ delay, intensity }) =>
       setTimeout(() => {
-        triggerHaptic(intensity);
+        triggerHaptics(
+          context,
+          capabilities,
+          "haptics.impactOccurred",
+          intensity,
+        );
         setPulseCount((prev) => prev + 1);
       }, delay),
     );
 
     return () => timeouts.forEach(clearTimeout);
-  }, []);
+  }, [context, capabilities]);
 
   const currentMessage = MESSAGES[messageIndex] ?? MESSAGES[0];
 
@@ -102,12 +98,12 @@ export function ProcessingView() {
           {/* Image container with shimmer effect */}
           <div className="relative overflow-hidden rounded-2xl border-4 border-white/50 shadow-2xl">
             {uploadedImage && (
-              <div className="relative h-48 w-48 md:h-56 md:w-56">
+              <div className="relative h-56 w-56">
                 <Image
                   src={uploadedImage}
                   alt="Your photo being transformed"
                   fill
-                  className="object-cover opacity-60 blur-[2px] grayscale"
+                  className="object-cover opacity-70 blur-[2px] grayscale"
                 />
                 {/* Shimmer overlay */}
                 <div className="animate-shimmer absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent" />
