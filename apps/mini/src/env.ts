@@ -20,6 +20,7 @@ export const env = createEnv({
     SITE_URL: z.url(),
     BASE_RPC_URL: z.url().optional(),
     BASE_SEPOLIA_RPC_URL: z.url().optional(),
+    RESOURCE_WALLET_ADDRESS: z.string(),
   },
 
   /**
