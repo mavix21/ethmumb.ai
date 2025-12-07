@@ -22,7 +22,7 @@ export const minikitConfig = {
     name: env.NEXT_PUBLIC_APPLICATION_NAME,
     subtitle: "ETHMumbai PFP Generator",
     description:
-      "Transform photos into ETHMumbai avatars. Choose from 3 styles: Classic Bus, Cyber Sea Link, or Heritage Gateway. Generate and share on Farcaster.",
+      "Transform photos into ETHMumbai avatars. Generate and share on Farcaster.",
     screenshotUrls: [`${ROOT_URL}/screenshot-01.png`],
     iconUrl: `${ROOT_URL}/icon.png`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
