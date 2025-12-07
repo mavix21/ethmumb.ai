@@ -19,6 +19,7 @@ import "@silk-hq/components/layered-styles.css";
 import { env } from "@/env";
 import { Header } from "@/shared/ui/header";
 
+import { ErudaProvider } from "./_providers/eruda";
 import { MumbaiBackground } from "./_ui/mumbai-animated-background";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -98,34 +99,36 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${inter.variable} ${sourceCodePro.variable} size-full font-sans antialiased`}
       >
-        <Suspense fallback={null}>
-          <OnchainKitClientProvider>
-            <MiniAppProvider>
-              <ConvexClientProvider>
-                <AuthProvider>
-                  <ThemeProvider
-                    attribute="class"
-                    defaultTheme="light"
-                    disableTransitionOnChange
-                    enableColorScheme
-                  >
-                    <div
-                      key="mumbai-bg-container"
-                      className="bg-background fixed inset-0"
+        <ErudaProvider>
+          <Suspense fallback={null}>
+            <OnchainKitClientProvider>
+              <MiniAppProvider>
+                <ConvexClientProvider>
+                  <AuthProvider>
+                    <ThemeProvider
+                      attribute="class"
+                      defaultTheme="light"
+                      disableTransitionOnChange
+                      enableColorScheme
                     >
-                      <MumbaiBackground />
-                    </div>
-                    <div className="relative z-1 flex h-[calc(100svh-4rem)] flex-col">
-                      <Header />
-                      {children}
-                    </div>
-                    <BottomNav showPrimaryAction={false} />
-                  </ThemeProvider>
-                </AuthProvider>
-              </ConvexClientProvider>
-            </MiniAppProvider>
-          </OnchainKitClientProvider>
-        </Suspense>
+                      <div
+                        key="mumbai-bg-container"
+                        className="bg-background fixed inset-0"
+                      >
+                        <MumbaiBackground />
+                      </div>
+                      <div className="relative z-1 flex h-[calc(100svh-4rem)] flex-col">
+                        <Header />
+                        {children}
+                      </div>
+                      <BottomNav showPrimaryAction={false} />
+                    </ThemeProvider>
+                  </AuthProvider>
+                </ConvexClientProvider>
+              </MiniAppProvider>
+            </OnchainKitClientProvider>
+          </Suspense>
+        </ErudaProvider>
       </body>
     </html>
   );
