@@ -204,9 +204,9 @@ export function GalleryPage() {
   }
 
   return (
-    <div className="relative h-full">
-      <div className="px-4 py-8">
-        <div className="mx-auto max-w-md space-y-6">
+    <div className="relative flex h-full flex-col overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col px-4 py-8">
+        <div className="mx-auto flex min-h-0 w-full max-w-md flex-1 flex-col space-y-6">
           {/* User Profile Section - Always visible from MiniApp context */}
           {user && (
             <>
@@ -246,9 +246,11 @@ export function GalleryPage() {
           )}
 
           {/* Gallery Section - Requires authentication */}
-          <section>
+          <section className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {isAuthenticated && user?.fid ? (
-              <AuthenticatedGallery fid={user.fid} />
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                <AuthenticatedGallery fid={user.fid} />
+              </div>
             ) : (
               <UnauthenticatedGallery />
             )}
