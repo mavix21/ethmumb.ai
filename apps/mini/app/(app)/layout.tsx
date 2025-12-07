@@ -99,8 +99,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body
         className={`${inter.variable} ${sourceCodePro.variable} size-full font-sans antialiased`}
       >
-        <ErudaProvider>
-          <Suspense fallback={null}>
+        <Suspense fallback={null}>
+          <ErudaProvider>
             <OnchainKitClientProvider>
               <MiniAppProvider>
                 <ConvexClientProvider>
@@ -127,8 +127,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 </ConvexClientProvider>
               </MiniAppProvider>
             </OnchainKitClientProvider>
-          </Suspense>
-        </ErudaProvider>
+          </ErudaProvider>
+        </Suspense>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cacheLife } from "next/cache";
 import { fetchQuery } from "convex/nextjs";
 
 import { api } from "@ethmumb.ai/convex/_generated/api";
@@ -7,13 +8,27 @@ import { ROOT_URL } from "@/lib/constants";
 import { minikitConfig } from "@/minikit.config";
 import { GenerationContent } from "@/pages/generation/generation-content";
 
+// Cached data fetching function - id becomes part of cache key
+async function getGeneration(id: string) {
+  "use cache";
+  cacheLife("hours");
+  return fetchQuery(api.generations.getById, { id });
+}
+
+// Required for Cache Components - must return at least one param for build validation
+// Real params will be generated at runtime via ISR
+export function generateStaticParams() {
+  return [{ id: "j575rvz5tdeg6qc562v8ytjb097wvv1d" }];
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const generation = await fetchQuery(api.generations.getById, { id });
+
+  const generation = await getGeneration(id);
 
   const defaultImageUrl = minikitConfig.frame.heroImageUrl;
   const appName = minikitConfig.frame.name;
@@ -95,7 +110,8 @@ export default async function GenerationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const generation = await fetchQuery(api.generations.getById, { id });
+
+  const generation = await getGeneration(id);
 
   return <GenerationContent generation={generation} />;
 }
