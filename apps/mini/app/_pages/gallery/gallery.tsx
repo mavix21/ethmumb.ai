@@ -85,11 +85,11 @@ function GenerationCard({ generation }: GenerationCardProps) {
   };
 
   return (
-    <>
+    <div className="relative">
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="group focus-visible:ring-ring relative aspect-square overflow-hidden rounded-lg focus:outline-none focus-visible:ring-2"
+        className="group focus-visible:ring-ring relative aspect-square w-full overflow-hidden rounded-lg focus:outline-none focus-visible:ring-2"
       >
         {generation.imageUrl ? (
           <Image
@@ -149,7 +149,7 @@ function GenerationCard({ generation }: GenerationCardProps) {
           </Card.View>
         </Card.Portal>
       </Card.Root>
-    </>
+    </div>
   );
 }
 
