@@ -51,6 +51,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
   // Extend wallet client with public actions to match x402 Signer type
   const fetchWithPayment = React.useMemo<FetchWithPayment | null>(() => {
     if (!walletClient) return null;
+    console.log("Creating fetchWithPayment with walletClient:", walletClient);
     const signer = walletClient.extend(publicActions);
     return wrapFetchWithPayment(fetch, signer, MAX_PAYMENT_USDC);
   }, [walletClient]);

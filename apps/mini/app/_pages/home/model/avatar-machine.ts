@@ -292,6 +292,7 @@ const generateAvatarActor = fromPromise<GenerateAvatarResult, ServiceInput>(
 
     if (!response.ok) {
       const errorData = (await response.json()) as GenerateAvatarErrorResponse;
+      console.error("Avatar generation failed:", errorData);
       throw new Error(errorData.error || "Failed to generate avatar");
     }
 
