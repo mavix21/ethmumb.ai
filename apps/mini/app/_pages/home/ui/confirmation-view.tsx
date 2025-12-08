@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ConnectWallet, Wallet } from "@coinbase/onchainkit/wallet";
 import {
   ArrowLeft,
@@ -66,14 +65,13 @@ export function ConfirmationView() {
             {/* Glow effect */}
             <div className="bg-brand-cream/20 absolute inset-0 -z-10 blur-3xl" />
 
-            {/* Image container - matching AnalyzingView structure exactly */}
-            <div className="relative h-64 w-64 overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl md:h-80 md:w-80">
-              <Image
+            {/* Image container - preserves original aspect ratio */}
+            <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={uploadedImage}
                 alt="Your photo"
-                className="h-full w-full object-cover"
-                width={320}
-                height={320}
+                className="block max-h-80 max-w-80 object-contain"
               />
             </div>
 
