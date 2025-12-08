@@ -125,7 +125,6 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   const { image, style, fid } = parseResult.data;
-  console.warn({ image, style, fid: fid ?? "fid not provided" });
   const prompt = stylePrompts[style];
 
   // Parse the data URL
@@ -268,7 +267,6 @@ async function storeGeneratedAvatar(
 ): Promise<string> {
   // Get a temporary upload URL from Convex
   const uploadUrl = await fetchMutation(api.storage.generateUploadUrl);
-  console.warn("Obtained upload URL from Convex storage", { uploadUrl });
 
   // Convert base64 to a Blob for upload
   const blob = base64ToBlob(generatedFile.base64, generatedFile.mediaType);
@@ -281,7 +279,6 @@ async function storeGeneratedAvatar(
     },
     body: blob,
   });
-  console.warn("Uploaded image to Convex storage", { uploadResponse });
 
   if (!uploadResponse.ok) {
     throw new Error(
@@ -307,6 +304,5 @@ async function storeGeneratedAvatar(
     imageStorageId: parsedResult.data.storageId as Id<"_storage">,
     style,
   });
-  console.warn("Stored generation record in database", { genId });
   return genId;
 }
