@@ -23,10 +23,6 @@ export function ErrorView() {
               ? error.message
               : "An unexpected error occurred while processing your image."}
           </p>
-          <p className="text-foreground/60 text-xs">
-            This can happen occasionally. Please try again with the same or a
-            different image.
-          </p>
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
