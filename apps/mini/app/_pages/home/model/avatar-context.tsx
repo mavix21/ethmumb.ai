@@ -55,26 +55,12 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
   // Using getWalletClient with the app's wagmi config for MiniKit/TBA compatibility
   React.useEffect(() => {
     async function setupPaymentFetch() {
-      // LOG 1: Initial wallet state
-      console.log("[x402-debug] 1. Wallet state:", {
-        isConnected,
-        address,
-        chainId,
-        connectorId: connector?.id,
-        connectorName: connector?.name,
-        connectorType: connector?.type,
-      });
-
       if (!isConnected || !address || !chainId || !connector) {
-        console.log("[x402-debug] 1a. Wallet not ready, skipping setup");
         setFetchWithPayment(null);
         return;
       }
 
       try {
-        console.log(
-          "[x402-debug] 2. Getting wallet client with app's wagmi config...",
-        );
         // Use the same wagmi config from OnchainKit - NOT a separate config
         const walletClient = await getWalletClient(wagmiConfig, {
           account: address,
@@ -82,27 +68,14 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
           connector: connector,
         });
 
-        // LOG 2: WalletClient details - critical for understanding x402 compatibility
-        console.log("[x402-debug] 3. WalletClient obtained:", {
-          address: walletClient.account.address,
-          chainId: walletClient.chain.id,
-          chainName: walletClient.chain.name,
-          hasSignTypedData: typeof walletClient.signTypedData === "function",
-          hasSignMessage: typeof walletClient.signMessage === "function",
-          walletClientKeys: Object.keys(walletClient),
-        });
-
         const wrappedFetch = wrapFetchWithPayment(
           fetch,
           walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
           MAX_PAYMENT_USDC,
         );
-        console.log(
-          "[x402-debug] 4. wrapFetchWithPayment created successfully",
-        );
         setFetchWithPayment(() => wrappedFetch);
-      } catch (error) {
-        console.error("[x402-debug] ERROR in setup:", error);
+      } catch {
+        console.error("Failed to set up payment fetch");
         setFetchWithPayment(null);
       }
     }
