@@ -41,6 +41,9 @@ interface AvatarContextValue {
 
 const AvatarContext = React.createContext<AvatarContextValue | null>(null);
 
+// Max payment amount: $0.20 USDC (endpoint costs $0.20)
+const MAX_PAYMENT_USDC = BigInt(0.2 * 10 ** 6);
+
 export function AvatarProvider({ children }: { children: ReactNode }) {
   const { address, chainId, connector, isConnected } = useAccount();
   // Use the SAME wagmi config that OnchainKit/MiniKit provides - this is critical!
@@ -92,6 +95,7 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
         const wrappedFetch = wrapFetchWithPayment(
           fetch,
           walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
+          MAX_PAYMENT_USDC,
         );
         console.log(
           "[x402-debug] 4. wrapFetchWithPayment created successfully",
