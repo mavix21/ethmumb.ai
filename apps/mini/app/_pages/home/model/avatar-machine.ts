@@ -117,8 +117,9 @@ export interface AvatarMachineInput {
 export interface AvatarContext {
   fid: number | null;
   selectedStyle: StyleId;
-  uploadedImage: string | null;
+  uploadedImage: string | null; // Original image for display (never mutated after upload)
   uploadedFile: File | null;
+  compressedImageForApi: string | null; // Compressed image for API transport
   generatedImage: string | null;
   generationId: string | null;
   error: AvatarError | null;
@@ -280,67 +281,24 @@ interface GenerateAvatarResult {
  */
 const generateAvatarActor = fromPromise<GenerateAvatarResult, ServiceInput>(
   async ({ input }) => {
-    console.log("[x402-debug] 5. Starting avatar generation request...");
-    console.log("[x402-debug] 5a. Request payload:", {
-      style: input.style,
-      fid: input.fid,
-      imageLength: input.image.length,
+    const response = await input.fetchWithPayment("/api/generate-avatar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: input.image,
+        style: input.style,
+        fid: input.fid,
+      }),
     });
 
-    try {
-      console.log("[x402-debug] 6. Calling fetchWithPayment...");
-      const response = await input.fetchWithPayment("/api/generate-avatar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          image: input.image,
-          style: input.style,
-          fid: input.fid,
-        }),
-      });
-
-      // LOG: Response details
-      console.log("[x402-debug] 7. Response received:", {
-        status: response.status,
-        statusText: response.statusText,
-        ok: response.ok,
-        headers: Object.fromEntries(response.headers.entries()),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("[x402-debug] 8. ERROR - Response not ok:", {
-          status: response.status,
-          errorText,
-        });
-
-        // Try to parse as JSON for structured error
-        try {
-          const errorData = JSON.parse(
-            errorText,
-          ) as GenerateAvatarErrorResponse;
-          console.error("[x402-debug] 8a. Parsed error:", errorData);
-          throw new Error(errorData.error || "Failed to generate avatar");
-        } catch {
-          throw new Error(errorText || "Failed to generate avatar");
-        }
-      }
-
-      const data = (await response.json()) as GenerateAvatarResponse;
-      console.log("[x402-debug] 9. SUCCESS - Avatar generated:", {
-        hasImageUrl: !!data.imageUrl,
-        generationId: data.generationId,
-      });
-      return { imageUrl: data.imageUrl, generationId: data.generationId };
-    } catch (error) {
-      // LOG: Catch any error in the payment/fetch flow
-      console.error("[x402-debug] ERROR in generateAvatarActor:", {
-        errorName: error instanceof Error ? error.name : "Unknown",
-        errorMessage: error instanceof Error ? error.message : String(error),
-        errorStack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
+    if (!response.ok) {
+      const errorData = (await response.json()) as GenerateAvatarErrorResponse;
+      console.error("Avatar generation failed:", errorData);
+      throw new Error(errorData.error || "Failed to generate avatar");
     }
+
+    const data = (await response.json()) as GenerateAvatarResponse;
+    return { imageUrl: data.imageUrl, generationId: data.generationId };
   },
 );
 
@@ -404,6 +362,7 @@ export const avatarMachine = setup({
       fid: () => null,
       uploadedImage: () => null,
       uploadedFile: () => null,
+      compressedImageForApi: () => null,
       generatedImage: () => null,
       generationId: () => null,
       error: () => null,
@@ -437,6 +396,7 @@ export const avatarMachine = setup({
     selectedStyle: STYLES.CLASSIC_BEST,
     uploadedImage: null,
     uploadedFile: null,
+    compressedImageForApi: null,
     generatedImage: null,
     generationId: null,
     error: null,
@@ -444,7 +404,6 @@ export const avatarMachine = setup({
     isModelLoading: true,
     nsfwScore: null,
     fetchWithPayment: input.fetchWithPayment,
-    pendingResponse: null,
   }),
   // Global event handlers for wallet connection changes
   on: {
@@ -517,8 +476,10 @@ export const avatarMachine = setup({
             target: "user_confirming",
             actions: assign({
               nsfwScore: ({ event }) => event.output.score,
-              // Update with compressed image data for API transport
-              uploadedImage: ({ event }) => event.output.compressedDataUrl,
+              // Store compressed image separately for API transport
+              // Keep uploadedImage unchanged for display
+              compressedImageForApi: ({ event }) =>
+                event.output.compressedDataUrl,
               uploadedFile: ({ event }) => event.output.compressedFile,
             }),
           },
@@ -566,14 +527,17 @@ export const avatarMachine = setup({
         id: "generator",
         src: "generateAvatarActor",
         input: ({ context }) => {
-          if (!context.uploadedImage) {
+          // Use compressed image for API, fall back to original if compression failed
+          const imageForApi =
+            context.compressedImageForApi ?? context.uploadedImage;
+          if (!imageForApi) {
             throw new Error("No image uploaded - this should never happen");
           }
           if (!context.fetchWithPayment) {
             throw new Error("Wallet not connected - this should never happen");
           }
           return {
-            image: context.uploadedImage,
+            image: imageForApi,
             style: context.selectedStyle,
             fid: context.fid ?? undefined,
             fetchWithPayment: context.fetchWithPayment,

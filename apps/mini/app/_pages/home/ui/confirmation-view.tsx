@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ConnectWallet, Wallet } from "@coinbase/onchainkit/wallet";
 import {
   ArrowLeft,
@@ -19,21 +20,6 @@ import { useMiniApp } from "@/shared/context/miniapp-context";
 
 import { useAvatar } from "../model/avatar-context";
 import { styleOptions } from "../model/style-options";
-
-/**
- * Simple image component using background-image for maximum compatibility
- * Background-image is more reliable than img src for data URLs in webviews
- */
-function PreviewImage({ src, alt }: { src: string; alt: string }) {
-  return (
-    <div
-      role="img"
-      aria-label={alt}
-      className="h-[300px] w-[300px] bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${src})` }}
-    />
-  );
-}
 
 export function ConfirmationView() {
   const {
@@ -74,15 +60,21 @@ export function ConfirmationView() {
           </p>
         </div>
 
-        {/* Image preview - using native img for reliable data URL rendering */}
+        {/* Image preview - same approach as AnalyzingView which always works */}
         {uploadedImage && (
           <div className="relative">
             {/* Glow effect */}
             <div className="bg-brand-cream/20 absolute inset-0 -z-10 blur-3xl" />
 
-            {/* Image container */}
-            <div className="overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl">
-              <PreviewImage src={uploadedImage} alt="Your photo" />
+            {/* Image container - matching AnalyzingView structure exactly */}
+            <div className="relative h-64 w-64 overflow-hidden rounded-2xl border-4 border-white/90 bg-white shadow-2xl md:h-80 md:w-80">
+              <Image
+                src={uploadedImage}
+                alt="Your photo"
+                className="h-full w-full object-cover"
+                width={320}
+                height={320}
+              />
             </div>
 
             {/* Style badge with dropdown */}
