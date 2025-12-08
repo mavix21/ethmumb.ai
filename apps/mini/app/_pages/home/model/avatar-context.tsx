@@ -1,18 +1,14 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { Signer } from "x402/types";
 import * as React from "react";
 import { useMachine } from "@xstate/react";
+import { publicActions } from "viem";
 import { useAccount, useConfig } from "wagmi";
 import { getWalletClient } from "wagmi/actions";
-import { wrapFetchWithPayment } from "x402-fetch";
 
-import type {
-  AvatarError,
-  AvatarEvent,
-  FetchWithPayment,
-  StyleId,
-} from "./avatar-machine";
+import type { AvatarError, AvatarEvent, StyleId } from "./avatar-machine";
 import type { StyleOption } from "./style-options";
 import { avatarMachine } from "./avatar-machine";
 import { getStyleById } from "./style-options";
@@ -26,8 +22,16 @@ interface AvatarContextValue {
   isNsfwViolation: boolean;
   isNsfwModelLoading: boolean;
   isUserConfirming: boolean;
+  // Generating phase substates
   isGenerating: boolean;
+  isDiscovering: boolean;
+  isAwaitingPayment: boolean;
+  isExecutingGeneration: boolean;
+  // Error states
   isServerError: boolean;
+  isDiscoveryError: boolean;
+  isPaymentError: boolean;
+  isGenerationError: boolean;
   isSuccess: boolean;
   isWalletConnected: boolean;
   selectedStyle: StyleId;
@@ -41,61 +45,57 @@ interface AvatarContextValue {
 
 const AvatarContext = React.createContext<AvatarContextValue | null>(null);
 
-// Max payment amount: $0.20 USDC (endpoint costs $0.20)
-const MAX_PAYMENT_USDC = BigInt(0.2 * 10 ** 6);
-
 export function AvatarProvider({ children }: { children: ReactNode }) {
   const { address, chainId, connector, isConnected } = useAccount();
   // Use the SAME wagmi config that OnchainKit/MiniKit provides - this is critical!
   const wagmiConfig = useConfig();
-  const [fetchWithPayment, setFetchWithPayment] =
-    React.useState<FetchWithPayment | null>(null);
+  const [walletClient, setWalletClient] = React.useState<Signer | null>(null);
 
-  // Create the x402-wrapped fetch when wallet is connected
+  // Get wallet client when wallet is connected
   // Using getWalletClient with the app's wagmi config for MiniKit/TBA compatibility
   React.useEffect(() => {
-    async function setupPaymentFetch() {
+    async function setupWalletClient() {
       if (!isConnected || !address || !chainId || !connector) {
-        setFetchWithPayment(null);
+        setWalletClient(null);
         return;
       }
 
       try {
         // Use the same wagmi config from OnchainKit - NOT a separate config
-        const walletClient = await getWalletClient(wagmiConfig, {
+        const client = await getWalletClient(wagmiConfig, {
           account: address,
           chainId: chainId,
           connector: connector,
         });
 
-        const wrappedFetch = wrapFetchWithPayment(
-          fetch,
-          walletClient as unknown as Parameters<typeof wrapFetchWithPayment>[1],
-          MAX_PAYMENT_USDC,
-        );
-        setFetchWithPayment(() => wrappedFetch);
+        // Extend wallet client with public actions to match x402's SignerWallet type
+        // x402 requires Client with both PublicActions and WalletActions
+        const extendedClient = client.extend(publicActions);
+        setWalletClient(extendedClient);
       } catch {
-        console.error("Failed to set up payment fetch");
-        setFetchWithPayment(null);
+        console.error("Failed to get wallet client");
+        setWalletClient(null);
       }
     }
 
-    void setupPaymentFetch();
+    void setupWalletClient();
   }, [address, chainId, connector, isConnected, wagmiConfig]);
+
   const [state, send] = useMachine(avatarMachine, {
     input: {
-      fetchWithPayment,
+      walletClient,
+      walletAddress: address ?? null,
     },
   });
 
   // Sync wallet connection state with machine
   React.useEffect(() => {
-    if (fetchWithPayment) {
-      send({ type: "WALLET_CONNECTED", fetchWithPayment });
+    if (walletClient && address) {
+      send({ type: "WALLET_CONNECTED", walletClient, walletAddress: address });
     } else {
       send({ type: "WALLET_DISCONNECTED" });
     }
-  }, [fetchWithPayment, send]);
+  }, [walletClient, address, send]);
 
   const value: AvatarContextValue = {
     state,
@@ -105,10 +105,18 @@ export function AvatarProvider({ children }: { children: ReactNode }) {
     isNsfwViolation: state.matches("nsfw_violation"),
     isNsfwModelLoading: state.context.isModelLoading,
     isUserConfirming: state.matches("user_confirming"),
+    // Generating phase - overall and substates
     isGenerating: state.matches("generating"),
+    isDiscovering: state.matches({ generating: "discovering" }),
+    isAwaitingPayment: state.matches({ generating: "awaitingPayment" }),
+    isExecutingGeneration: state.matches({ generating: "executing" }),
+    // Error states - overall and specific phases
     isServerError: state.matches("error"),
+    isDiscoveryError: state.matches({ error: "discovery" }),
+    isPaymentError: state.matches({ error: "payment" }),
+    isGenerationError: state.matches({ error: "generation" }),
     isSuccess: state.matches("success"),
-    isWalletConnected: state.context.fetchWithPayment !== null,
+    isWalletConnected: state.context.walletClient !== null,
     selectedStyle: state.context.selectedStyle,
     currentStyle: getStyleById(state.context.selectedStyle),
     uploadedImage: state.context.uploadedImage,

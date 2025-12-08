@@ -8,6 +8,7 @@ import { ConfirmationView } from "./ui/confirmation-view";
 import { ErrorView } from "./ui/error-view";
 import { IdleView } from "./ui/idle-view";
 import { NsfwViolationView } from "./ui/nsfw-violation-view";
+import { PaymentApprovalView } from "./ui/payment-approval-view";
 import { ProcessingView } from "./ui/processing-view";
 import { SuccessView } from "./ui/success-view";
 
@@ -17,10 +18,19 @@ export function HomePage() {
     isAnalyzing,
     isNsfwViolation,
     isUserConfirming,
-    isGenerating,
+    // Generating substates
+    isDiscovering,
+    isAwaitingPayment,
+    isExecutingGeneration,
+    // Error states
     isServerError,
     isSuccess,
   } = useAvatar();
+
+  // Show PaymentApprovalView during discovery and wallet signing phases
+  const showPaymentApproval = isDiscovering || isAwaitingPayment;
+  // Show ProcessingView only during actual generation
+  const showProcessing = isExecutingGeneration;
 
   return (
     <>
@@ -30,7 +40,8 @@ export function HomePage() {
       {isAnalyzing && <AnalyzingView />}
       {isNsfwViolation && <NsfwViolationView />}
       {isUserConfirming && <ConfirmationView />}
-      {isGenerating && <ProcessingView />}
+      {showPaymentApproval && <PaymentApprovalView />}
+      {showProcessing && <ProcessingView />}
       {isServerError && <ErrorView />}
       {isSuccess && <SuccessView />}
     </>
