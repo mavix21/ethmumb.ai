@@ -49,30 +49,25 @@ export function ProcessingView() {
     return () => clearInterval(progressInterval);
   }, []);
 
-  // Haptic "minting kicks" at intervals - feels like something is being forged
+  // Haptic "minting kicks" at intervals - consistent TAC-tac pattern
   React.useEffect(() => {
-    const hapticPattern = [
-      { delay: 2000, intensity: "medium" as const },
-      { delay: 3500, intensity: "heavy" as const },
-      { delay: 5000, intensity: "light" as const },
-      { delay: 7000, intensity: "heavy" as const },
-      { delay: 9000, intensity: "medium" as const },
-      { delay: 11000, intensity: "heavy" as const },
-    ];
+    const intervalId = setInterval(() => {
+      // TAC (heavy)
+      triggerHaptics(context, capabilities, "haptics.impactOccurred", "heavy");
+      setPulseCount((prev) => prev + 1);
 
-    const timeouts = hapticPattern.map(({ delay, intensity }) =>
+      // tac (medium) after 300ms
       setTimeout(() => {
         triggerHaptics(
           context,
           capabilities,
           "haptics.impactOccurred",
-          intensity,
+          "medium",
         );
-        setPulseCount((prev) => prev + 1);
-      }, delay),
-    );
+      }, 300);
+    }, 1000); // Repeat every second
 
-    return () => timeouts.forEach(clearTimeout);
+    return () => clearInterval(intervalId);
   }, [context, capabilities]);
 
   const currentMessage = MESSAGES[messageIndex] ?? MESSAGES[0];
